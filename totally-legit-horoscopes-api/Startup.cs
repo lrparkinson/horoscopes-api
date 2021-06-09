@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Npgsql;
+using totally_legit_horoscopes_api.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace totally_legit_horoscopes_api
 {
@@ -26,7 +23,7 @@ namespace totally_legit_horoscopes_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -58,6 +55,28 @@ namespace totally_legit_horoscopes_api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private string GetConnectionString()
+        {
+            string DatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            if (String.IsNullOrEmpty(DatabaseUrl))
+            {
+                DatabaseUrl = Configuration.GetConnectionString("pg");
+            }
+            Uri DatabaseUri = new Uri(DatabaseUrl);
+            string[] UserInfo = DatabaseUri.UserInfo.Split(':');
+            NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = DatabaseUri.Host,
+                Port = DatabaseUri.Port,
+                Username = UserInfo[0],
+                Password = UserInfo[1],
+                Database = DatabaseUri.LocalPath.TrimStart('/'),
+                SslMode = SslMode.Require,
+                TrustServerCertificate = true
+            };
+            return builder.ToString();
         }
     }
 }
