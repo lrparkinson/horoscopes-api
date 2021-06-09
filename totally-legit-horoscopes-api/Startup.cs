@@ -30,7 +30,7 @@ namespace totally_legit_horoscopes_api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "totally_legit_horoscopes_api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Totally Legit Horoscopes API", Version = "v1" });
             });
         }
 
@@ -40,9 +40,13 @@ namespace totally_legit_horoscopes_api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "totally_legit_horoscopes_api v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Totally Legit Horoscopes v1");
+                c.RoutePrefix = string.Empty;
+             });
 
             app.UseHttpsRedirection();
 
