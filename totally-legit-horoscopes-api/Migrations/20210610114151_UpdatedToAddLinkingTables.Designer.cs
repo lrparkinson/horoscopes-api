@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using totally_legit_horoscopes_api.Contexts;
@@ -9,9 +10,10 @@ using totally_legit_horoscopes_api.Contexts;
 namespace totally_legit_horoscopes_api.Migrations
 {
     [DbContext(typeof(TotallyLegitHoroscopesContext))]
-    partial class TotallyLegitHoroscopesContextModelSnapshot : ModelSnapshot
+    [Migration("20210610114151_UpdatedToAddLinkingTables")]
+    partial class UpdatedToAddLinkingTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -15,6 +15,7 @@ namespace totally_legit_horoscopes_api.Contexts
         {
             modelBuilder.Entity<StarSign>().HasData(GetStarSigns());
             modelBuilder.Entity<Profession>().HasData(GetProfessions());
+            modelBuilder.Entity<Hobby>().HasData(GetHobbies());
         }
 
         private List<Profession> GetProfessions()
@@ -41,9 +42,16 @@ namespace totally_legit_horoscopes_api.Contexts
                 new StarSign { Name = "Capricornus", StartDate = new DateTime(1, 12, 22), EndDate = new DateTime(1, 1, 19) }
             };
         }
+        private List<Hobby> GetHobbies() {
+            string[] lines = File.ReadAllLines(@".\Resources\hobbies.txt");
+            List<Hobby> hobbies = lines.Select(hobby => new Hobby { Name = hobby }).ToList();
+            return hobbies;
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
         public DbSet<Profession> Professions { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<Horoscope> Horoscopes { get; set; }
     }
 }

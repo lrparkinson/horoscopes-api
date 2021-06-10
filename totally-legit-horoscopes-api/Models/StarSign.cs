@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace totally_legit_horoscopes_api.Models
 {
@@ -14,5 +12,6 @@ namespace totally_legit_horoscopes_api.Models
         public DateTime StartDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
+        public virtual ICollection<User> User { get; set; }
     }
 }

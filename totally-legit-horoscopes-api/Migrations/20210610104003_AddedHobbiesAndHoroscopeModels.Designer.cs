@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using totally_legit_horoscopes_api.Contexts;
@@ -9,9 +10,10 @@ using totally_legit_horoscopes_api.Contexts;
 namespace totally_legit_horoscopes_api.Migrations
 {
     [DbContext(typeof(TotallyLegitHoroscopesContext))]
-    partial class TotallyLegitHoroscopesContextModelSnapshot : ModelSnapshot
+    [Migration("20210610104003_AddedHobbiesAndHoroscopeModels")]
+    partial class AddedHobbiesAndHoroscopeModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,27 +21,17 @@ namespace totally_legit_horoscopes_api.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("HobbyUser", b =>
-                {
-                    b.Property<string>("HobbiesName")
-                        .HasColumnType("text");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("HobbiesName", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("HobbyUser");
-                });
-
             modelBuilder.Entity("totally_legit_horoscopes_api.Models.Hobby", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Name");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Hobbies");
 
@@ -5470,11 +5462,9 @@ namespace totally_legit_horoscopes_api.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ProfessionName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StarSignName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("UserId");
@@ -5486,19 +5476,11 @@ namespace totally_legit_horoscopes_api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("HobbyUser", b =>
+            modelBuilder.Entity("totally_legit_horoscopes_api.Models.Hobby", b =>
                 {
-                    b.HasOne("totally_legit_horoscopes_api.Models.Hobby", null)
-                        .WithMany()
-                        .HasForeignKey("HobbiesName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("totally_legit_horoscopes_api.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Hobbies")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("totally_legit_horoscopes_api.Models.Horoscope", b =>
@@ -5513,30 +5495,21 @@ namespace totally_legit_horoscopes_api.Migrations
             modelBuilder.Entity("totally_legit_horoscopes_api.Models.User", b =>
                 {
                     b.HasOne("totally_legit_horoscopes_api.Models.Profession", "Profession")
-                        .WithMany("User")
-                        .HasForeignKey("ProfessionName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("ProfessionName");
 
                     b.HasOne("totally_legit_horoscopes_api.Models.StarSign", "StarSign")
-                        .WithMany("User")
-                        .HasForeignKey("StarSignName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("StarSignName");
 
                     b.Navigation("Profession");
 
                     b.Navigation("StarSign");
                 });
 
-            modelBuilder.Entity("totally_legit_horoscopes_api.Models.Profession", b =>
+            modelBuilder.Entity("totally_legit_horoscopes_api.Models.User", b =>
                 {
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("totally_legit_horoscopes_api.Models.StarSign", b =>
-                {
-                    b.Navigation("User");
+                    b.Navigation("Hobbies");
                 });
 #pragma warning restore 612, 618
         }

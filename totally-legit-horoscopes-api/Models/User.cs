@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace totally_legit_horoscopes_api.Models
 {
@@ -18,6 +20,7 @@ namespace totally_legit_horoscopes_api.Models
         public Profession Profession { get; set; }
         [Required]
         public StarSign StarSign { get; set; }
+        public List<Hobby> Hobbies { get; set; }
 
     }
 }
