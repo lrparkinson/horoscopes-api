@@ -16,6 +16,8 @@ namespace totally_legit_horoscopes_api.Contexts
             modelBuilder.Entity<StarSign>().HasData(GetStarSigns());
             modelBuilder.Entity<Profession>().HasData(GetProfessions());
             modelBuilder.Entity<Hobby>().HasData(GetHobbies());
+            modelBuilder.Entity<PositiveAbstractNoun>().HasData(GetPositiveAbstractNouns());
+            modelBuilder.Entity<NegativeAbstractNoun>().HasData(GetNegativeAbstractNouns());
         }
 
         private List<Profession> GetProfessions()
@@ -47,11 +49,24 @@ namespace totally_legit_horoscopes_api.Contexts
             List<Hobby> hobbies = lines.Select(hobby => new Hobby { Name = hobby }).ToList();
             return hobbies;
         }
+        private List<PositiveAbstractNoun> GetPositiveAbstractNouns() {
+            string[] lines = File.ReadAllLines(@".\Resources\positive_abstract_nouns.txt");
+            List<PositiveAbstractNoun> positiveAbstractNouns = lines.Select(noun => new PositiveAbstractNoun { Value = noun }).ToList();
+            return positiveAbstractNouns;
+        }   
+        private List<NegativeAbstractNoun> GetNegativeAbstractNouns()
+        {
+            string[] lines = File.ReadAllLines(@".\Resources\negative_abstract_nouns.txt");
+            List<NegativeAbstractNoun> negativeAbstractNouns = lines.Select(noun => new NegativeAbstractNoun { Value = noun }).ToList();
+            return negativeAbstractNouns;
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
         public DbSet<Profession> Professions { get; set; }
         public DbSet<Hobby> Hobbies { get; set; }
         public DbSet<Horoscope> Horoscopes { get; set; }
+        public DbSet<PositiveAbstractNoun> PositiveAbstractNouns { get; set; }
+        public DbSet<NegativeAbstractNoun> NegativeAbstractNouns { get; set; }
     }
 }
