@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.Contexts;
-using totally_legit_horoscopes_api.Models;
+using totally_legit_horoscopes_api.DTOs;
+using System.Linq;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -13,17 +14,19 @@ namespace totally_legit_horoscopes_api.Controllers
     public class ProfessionsController : ControllerBase
     {
         private readonly TotallyLegitHoroscopesContext _context;
+        private readonly IMapper _mapper;
 
-        public ProfessionsController(TotallyLegitHoroscopesContext context)
+        public ProfessionsController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Professions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profession>>> GetProfessions()
+        public async Task<ActionResult<IEnumerable<ProfessionDTO>>> GetProfessions()
         {
-            return await _context.Professions.ToListAsync();
+            return await _context.Professions.Select(profession => _mapper.Map<ProfessionDTO>(profession)).ToListAsync();
         }
 
     }
