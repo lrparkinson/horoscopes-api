@@ -18,6 +18,7 @@ namespace totally_legit_horoscopes_api.Contexts
             modelBuilder.Entity<Hobby>().HasData(GetHobbies());
             modelBuilder.Entity<PositiveAbstractNoun>().HasData(GetPositiveAbstractNouns());
             modelBuilder.Entity<NegativeAbstractNoun>().HasData(GetNegativeAbstractNouns());
+            modelBuilder.Entity<Dinosaur>().HasData(GetDinosaurs());
         }
 
         private List<Profession> GetProfessions()
@@ -60,6 +61,12 @@ namespace totally_legit_horoscopes_api.Contexts
             List<NegativeAbstractNoun> negativeAbstractNouns = lines.Select(noun => new NegativeAbstractNoun { Value = noun }).ToList();
             return negativeAbstractNouns;
         }
+        private List<Dinosaur> GetDinosaurs()
+        {
+            string[] dinos = File.ReadAllLines(@".\Resources\dinosaurs.txt");
+            List<Dinosaur> dinosaurs = dinos.Select(dino => new Dinosaur { Name = dino }).ToList();
+            return dinosaurs;
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
@@ -68,5 +75,6 @@ namespace totally_legit_horoscopes_api.Contexts
         public DbSet<Horoscope> Horoscopes { get; set; }
         public DbSet<PositiveAbstractNoun> PositiveAbstractNouns { get; set; }
         public DbSet<NegativeAbstractNoun> NegativeAbstractNouns { get; set; }
+        public DbSet<Dinosaur> Dinosaurs { get; set; }
     }
 }

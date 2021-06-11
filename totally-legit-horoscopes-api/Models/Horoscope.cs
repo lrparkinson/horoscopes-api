@@ -9,7 +9,7 @@ namespace totally_legit_horoscopes_api.Models
     public class Horoscope
     {
         [Key]
-        public long HoroscopeId {get;set;}
+        public long HoroscopeId { get; set; }
         [Required]
         public string Reading { get; set; }
         [Required]
