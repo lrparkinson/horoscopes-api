@@ -13,6 +13,8 @@ namespace totally_legit_horoscopes_api.Models
         [EmailAddress]
         public string Email { get; set; }
         [Required]
+        public string Password { get; set; }
+        [Required]
         public DateTime Dob { get; set; }
         [Required]
         public int NthChild { get; set; }
