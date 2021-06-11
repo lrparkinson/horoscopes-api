@@ -11,6 +11,8 @@ namespace totally_legit_horoscopes_api.Models
         [Key]
         public long HoroscopeId { get; set; }
         [Required]
+        public string Category { get; set; }
+        [Required]
         public string Reading { get; set; }
         [Required]
         public DateTime ReadingDate { get; set; }
