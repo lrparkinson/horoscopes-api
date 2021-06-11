@@ -31,18 +31,18 @@ namespace totally_legit_horoscopes_api.Contexts
         {
             return new List<StarSign>
             {
-                new StarSign { Name = "Aquarius", StartDate = new DateTime(1, 1, 20), EndDate = new DateTime(1, 2, 18) },
-                new StarSign { Name = "Pisces", StartDate = new DateTime(1, 2, 19), EndDate = new DateTime(1, 3, 20) },
-                new StarSign { Name = "Aries", StartDate = new DateTime(1, 3, 21), EndDate = new DateTime(1, 4, 19) },
-                new StarSign { Name = "Taurus", StartDate = new DateTime(1, 4, 20), EndDate = new DateTime(1, 5, 20) },
-                new StarSign { Name = "Gemini", StartDate = new DateTime(1, 5, 21), EndDate = new DateTime(1, 6, 21) },
-                new StarSign { Name = "Cancer", StartDate = new DateTime(1, 6, 22), EndDate = new DateTime(1, 7, 22) },
-                new StarSign { Name = "Leo", StartDate = new DateTime(1, 7, 23), EndDate = new DateTime(1, 8, 22) },
-                new StarSign { Name = "Virgo", StartDate = new DateTime(1, 8, 23), EndDate = new DateTime(1, 9, 22) },
-                new StarSign { Name = "Libra", StartDate = new DateTime(1, 9, 23), EndDate = new DateTime(1, 10, 23) },
-                new StarSign { Name = "Scorpius", StartDate = new DateTime(1, 10, 24), EndDate = new DateTime(1, 11, 21) },
-                new StarSign { Name = "Sagiattarius", StartDate = new DateTime(1, 11, 22), EndDate = new DateTime(1, 12, 21) },
-                new StarSign { Name = "Capricornus", StartDate = new DateTime(1, 12, 22), EndDate = new DateTime(1, 1, 19) }
+                new StarSign { Name = "Aquarius", RulingPlanet = "Uranus", Element = "Air", StartDate = new DateTime(1, 1, 20), EndDate = new DateTime(1, 2, 18) },
+                new StarSign { Name = "Pisces", RulingPlanet = "Neptune", Element = "Water", StartDate = new DateTime(1, 2, 19), EndDate = new DateTime(1, 3, 20) },
+                new StarSign { Name = "Aries", RulingPlanet = "Mars", Element = "Fire", StartDate = new DateTime(1, 3, 21), EndDate = new DateTime(1, 4, 19) },
+                new StarSign { Name = "Taurus", RulingPlanet = "Venus", Element = "Earth", StartDate = new DateTime(1, 4, 20), EndDate = new DateTime(1, 5, 20) },
+                new StarSign { Name = "Gemini", RulingPlanet = "Mercury", Element = "Air", StartDate = new DateTime(1, 5, 21), EndDate = new DateTime(1, 6, 20) },
+                new StarSign { Name = "Cancer", RulingPlanet = "The Moon", Element = "Water", StartDate = new DateTime(1, 6, 21), EndDate = new DateTime(1, 7, 22) },
+                new StarSign { Name = "Leo", RulingPlanet = "The Sun", Element = "Fire", StartDate = new DateTime(1, 7, 23), EndDate = new DateTime(1, 8, 22) },
+                new StarSign { Name = "Virgo", RulingPlanet = "Mercury", Element = "Earth", StartDate = new DateTime(1, 8, 23), EndDate = new DateTime(1, 9, 22) },
+                new StarSign { Name = "Libra", RulingPlanet = "Venus", Element = "Air", StartDate = new DateTime(1, 9, 23), EndDate = new DateTime(1, 10, 22) },
+                new StarSign { Name = "Scorpius", RulingPlanet = "Pluto", Element = "Water", StartDate = new DateTime(1, 10, 23), EndDate = new DateTime(1, 11, 21) },
+                new StarSign { Name = "Sagiattarius", RulingPlanet = "Jupiter", Element = "Fire", StartDate = new DateTime(1, 11, 22), EndDate = new DateTime(1, 12, 21) },
+                new StarSign { Name = "Capricornus", RulingPlanet = "Saturn", Element = "Earth", StartDate = new DateTime(1, 12, 22), EndDate = new DateTime(1, 1, 19) }
             };
         }
         private List<Hobby> GetHobbies() {
