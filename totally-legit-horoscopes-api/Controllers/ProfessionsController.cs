@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using System.Linq;
+using totally_legit_horoscopes_api.DataAccess;
+using totally_legit_horoscopes_api.Models;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -15,18 +17,21 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly IProfessionRepository professionRepository;
 
         public ProfessionsController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            professionRepository = new ProfessionRepository(_context);
         }
 
         // GET: api/Professions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProfessionDTO>>> GetProfessions()
+        public async Task<IEnumerable<ProfessionDTO>> GetProfessions()
         {
-            return await _context.Professions.Select(profession => _mapper.Map<ProfessionDTO>(profession)).ToListAsync();
+            IEnumerable<Profession> professions = await professionRepository.GetAll();
+            return professions.Select(profession => _mapper.Map<ProfessionDTO>(profession));
         }
 
     }
