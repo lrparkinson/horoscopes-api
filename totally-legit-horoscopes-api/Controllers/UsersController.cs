@@ -74,9 +74,9 @@ namespace totally_legit_horoscopes_api.Controllers
 
         private int calculateLifeNumber(DateTime dateOfBirth)
         {
-            int year = dateOfBirth.Month;
+            int year = dateOfBirth.Year;
             int month = dateOfBirth.Month;
-            int day = dateOfBirth.Month;
+            int day = dateOfBirth.Day;
 
             int reducedYear = reduceInt(year);
             int reducedMonth = reduceInt(month);
