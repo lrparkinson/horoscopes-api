@@ -24,5 +24,9 @@ namespace totally_legit_horoscopes_api.Models
         public StarSign StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<Hobby> Hobbies { get; set; }
+
+        public virtual ICollection<UserStarRatings> StarRatings { get; set; }
+
+
     }
 }

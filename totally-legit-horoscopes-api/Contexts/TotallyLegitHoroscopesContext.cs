@@ -20,5 +20,9 @@ namespace totally_legit_horoscopes_api.Contexts
         public DbSet<NegativeAbstractNoun> NegativeAbstractNouns { get; set; }
         public DbSet<Dinosaur> Dinosaurs { get; set; }
         public DbSet<HoroscopeReadingTemplate> HoroscopeReadingTemplates { get; set; }
+        public DbSet<StarRatingCategories> StarRatingCategories { get; set; }
+        public DbSet<UserStarRatings> UserStarRatings { get; set; }
+
+
     }
 }
