@@ -25,7 +25,7 @@ namespace totally_legit_horoscopes_api.Controllers
 
         // GET: api/StarRatings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<UserStarRatings>>> GetUserStarRatings(long id)
+        public async Task<ActionResult<IDictionary<string, int>>> GetUserStarRatings(long id)
         {
             User user = await _context.Users.FindAsync(id);
 
@@ -33,34 +33,21 @@ namespace totally_legit_horoscopes_api.Controllers
             {
                 return NotFound();
             }
-
-            //Get all ratings for today for a given user
-            List<UserStarRatings> userStarRatings = user.StarRatings.Where( element => { return element.CreatedDate.Date.CompareTo(System.DateTime.UtcNow.Date) == 0; })
-                                                    .Select(element => _mapper.Map<UserStarRatings>(element)).ToList();
-            //If there are already ratings, then return them
-            if(userStarRatings.Count != 0)
-            {
-                return userStarRatings;
-            }
-
-            //Otherwise, generate ratings
-            List<UserStarRatings> generatedRatings = generateUserStarRatings(user);
-
-            generatedRatings.ForEach(element =>
-            {
-                _context.UserStarRatings.Add(element);
-            });
-            _context.SaveChanges();
-
-            return generatedRatings;
+            return Ok(GenerateUserStarRatings(user));
         }
 
-        private List<UserStarRatings> generateUserStarRatings( User user)
+        private IDictionary<string, int> GenerateUserStarRatings(User user)
         {
             IQueryable<StarRatingCategories> starRatingCategories = _context.StarRatingCategories.Distinct();
+            int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.Profession, user.FavoriteDinosaur);
+            Random random = new Random(seed);
+            IDictionary<string, int> ratings = new Dictionary<string, int>();
 
-            List<UserStarRatings> starRatings = starRatingCategories.Select(element => new UserStarRatings(user, element, new Random().Next(0, 5))).ToList();
-            return starRatings;
+            starRatingCategories.ToList().ForEach((element) =>
+             {
+                 ratings.Add(element.Name, random.Next(0, 5));
+             });
+            return ratings;
         }
     }
 }
