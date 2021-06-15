@@ -7,29 +7,20 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
     public class CareerDailyHoroscopeBuilder : HoroscopeBuilder
     {
         public CareerDailyHoroscopeBuilder(
+            User user,
             HoroscopeTemplateRepository horoscopeTemplateRepository,
             PositiveAbstractNounRepository positiveAbstractNounRepository,
             NegativeAbstractNounRepository negativeAbstractNounRepository)
             : base(
+                user,
                 horoscopeTemplateRepository,
                 positiveAbstractNounRepository,
                 negativeAbstractNounRepository)
         { }
 
-        public override Horoscope CreateHoroscopeBase()
+        public override HoroscopeReadingTemplate GetHoroscopeTemplate()
         {
-            SetupKnownDataDictionary();
-
-            horoscope.ReadingDate = DateTime.Now;
-            horoscope.User = this.user;
-            //TODO: get from DB
-            horoscope.Reading = "Read in Career Horoscope";
-            return horoscope;
-        }
-
-        public override void SetCategory()
-        {
-            horoscope.Category = "Career";
+            return horoscopeTemplateRepository.GetCareerHoroscope();
         }
     }
 }

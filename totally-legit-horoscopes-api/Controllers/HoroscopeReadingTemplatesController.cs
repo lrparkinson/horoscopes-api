@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using totally_legit_horoscopes_api.Contexts;
+using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.DTOs;
 
 namespace totally_legit_horoscopes_api.Controllers
@@ -17,11 +18,13 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly HoroscopeTemplateRepository _horoscopeTemplateRepository;
 
         public HoroscopeReadingTemplatesController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            _horoscopeTemplateRepository = new HoroscopeTemplateRepository(context);
         }
 
         // GET: api/HoroscopeReadingTemplates
@@ -34,11 +37,9 @@ namespace totally_legit_horoscopes_api.Controllers
 
         // GET: api/HoroscopeReadingTemplates/General
         [HttpGet("General")]
-        public async Task<ActionResult<IEnumerable<HoroscopeReadingTemplateDTO>>> GetGeneralHoroscopeReadingTemplates()
+        public HoroscopeReadingTemplateDTO GetGeneralHoroscopeReadingTemplates()
         {
-            return await _context.HoroscopeReadingTemplates.Where(horoscopeTemplate => horoscopeTemplate.Category.Equals("General"))
-                                                            .Select(HoroscopeReadingTemplate => _mapper.Map<HoroscopeReadingTemplateDTO>(HoroscopeReadingTemplate))
-                                                            .ToListAsync();
+            return _mapper.Map<HoroscopeReadingTemplateDTO>(_horoscopeTemplateRepository.GetGeneralHoroscope());
         }
 
         // GET: api/HoroscopeReadingTemplates/Love

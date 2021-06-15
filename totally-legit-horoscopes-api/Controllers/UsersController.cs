@@ -8,6 +8,8 @@ using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using totally_legit_horoscopes_api.Models;
 using System;
+using totally_legit_horoscopes_api.HoroscopeBuilder;
+using totally_legit_horoscopes_api.DataAccess;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -17,11 +19,13 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly UserRepository _userRepository;
 
         public UsersController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            _userRepository = new UserRepository(context);
         }
 
         // GET: api/Users
@@ -46,6 +50,20 @@ namespace totally_legit_horoscopes_api.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("CreateUser", new { id = dbUser.UserId }, user);
+        }
+
+        [HttpGet("{id:long}/GeneralHoroscope")]
+        public async Task<Horoscope> CreateUserHoroscope(long id)
+        {
+            User user = await _userRepository.Get(id);
+            GeneralDailyHoroscopeBuilder horoscopeBuilder = new GeneralDailyHoroscopeBuilder(
+                                                                user, 
+                                                                new HoroscopeTemplateRepository(_context),
+                                                                new PositiveAbstractNounRepository(_context),
+                                                                new NegativeAbstractNounRepository(_context));
+            HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
+            horoscopeDirector.ConstructFullHoroscope();
+            return horoscopeDirector.GetHoroscope();
         }
 
         private bool dateInStarSign(DateTime date, StarSign starSign)

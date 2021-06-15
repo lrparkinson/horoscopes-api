@@ -7,28 +7,20 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
     public class LoveDailyHoroscopeBuilder : HoroscopeBuilder
     {
         public LoveDailyHoroscopeBuilder(
+            User user,
             HoroscopeTemplateRepository horoscopeTemplateRepository,
             PositiveAbstractNounRepository positiveAbstractNounRepository,
             NegativeAbstractNounRepository negativeAbstractNounRepository)
             : base(
+                user,
                 horoscopeTemplateRepository,
                 positiveAbstractNounRepository,
                 negativeAbstractNounRepository)
         { }
 
-        public override Horoscope CreateHoroscopeBase()
+        public override HoroscopeReadingTemplate GetHoroscopeTemplate()
         {
-            SetupKnownDataDictionary();
-
-            horoscope.ReadingDate = DateTime.Now;
-            horoscope.User = this.user;
-            horoscope.Reading = "Read in Love Horoscope";
-            return horoscope;
-        }
-
-        public override void SetCategory()
-        {
-            horoscope.Category = "Love";
+            return horoscopeTemplateRepository.GetLoveHoroscope();
         }
     }
 }
