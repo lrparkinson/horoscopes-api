@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 
 namespace totally_legit_horoscopes_api.HoroscopeBuilder
@@ -13,25 +15,23 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
 
         protected const string positiveNounKey = "{positive_abstract_noun}";
         protected const string negativeNounKey = "{negative_abstract_noun}";
-        protected List<string> positiveNounBaseList = new List<string>() { "joy", "excitement", "freedom", "surprises" };
-        protected List<string> negativeNounBaseList = new List<string>() { "sorrow", "discontentment", "spiders", "impatience" };
         protected User user;
         protected Horoscope horoscope;
+        protected HoroscopeTemplateRepository horoscopeTemplateRepository;
+        protected PositiveAbstractNounRepository positiveNounRepository;
+        protected NegativeAbstractNounRepository negativeNounRepository;
 
-        private string template = "Today is a good day for {star_sign}, {ruling_planet} is in " +
-        "approaching an auspicious house of the night sky. As a result {occupation} " +
-        "such as you can look forward to a day filled with {positive_abstract_noun} " +
-        "but be wary of {negative_abstract_noun} which might turn this day from a win " +
-        "into a terrible loss";
 
-        private string template2 = "{star_sign} beware! {ruling_planet} is in retrograde. " +
-        "Change isn't always a bad thing, but just in case, connect with your element {star_sign_element}. " +
-        "Turn to {hobby} when things get overwhelming or hug a {favourite_dinosaur} stuffie.";
-
-        public HoroscopeBuilder()
+        public HoroscopeBuilder(
+            HoroscopeTemplateRepository horoscopeTemplateRepository,
+            PositiveAbstractNounRepository positiveAbstractNounRepository,
+            NegativeAbstractNounRepository negativeAbstractNounRepository)
         {
             random = new Random();
             user = new User();
+            this.horoscopeTemplateRepository = horoscopeTemplateRepository;
+            this.positiveNounRepository = positiveAbstractNounRepository;
+            this.negativeNounRepository = negativeAbstractNounRepository;
         }
 
         public abstract Horoscope CreateHoroscopeBase();
@@ -54,14 +54,15 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             }
         }
 
-        public void PopulateRandomWords()
+        public async void PopulateRandomWords()
         {
-            // read from DB
+            var positiveNounList = (await positiveNounRepository.GetAll()).ToList();
+            int randomIndex = random.Next(positiveNounList.Count());
+            this.horoscope.Reading = this.horoscope.Reading.Replace(positiveNounKey, positiveNounList[randomIndex].ToString());
 
-            int randomIndex = random.Next(positiveNounBaseList.Count);
-            this.horoscope.Reading = this.horoscope.Reading.Replace(positiveNounKey, positiveNounBaseList[randomIndex]);
-            randomIndex = random.Next(negativeNounBaseList.Count);
-            this.horoscope.Reading = this.horoscope.Reading.Replace(negativeNounKey, negativeNounBaseList[randomIndex]);
+            var negativeNounList = (await negativeNounRepository.GetAll()).ToList();
+            randomIndex = random.Next(negativeNounList.Count);
+            this.horoscope.Reading = this.horoscope.Reading.Replace(negativeNounKey, negativeNounList[randomIndex].ToString());
         }
 
         protected void SetupKnownDataDictionary()
