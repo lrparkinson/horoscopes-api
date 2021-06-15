@@ -45,7 +45,7 @@ namespace totally_legit_horoscopes_api.Controllers
 
             starRatingCategories.ToList().ForEach((element) =>
              {
-                 ratings.Add(element.Name, random.Next(0, 5));
+                 ratings.Add(element.Name, random.Next(0, 6));
              });
             return ratings;
         }
