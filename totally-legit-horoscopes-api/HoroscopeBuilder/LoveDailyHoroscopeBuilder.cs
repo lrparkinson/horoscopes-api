@@ -9,13 +9,11 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         public LoveDailyHoroscopeBuilder(
             User user,
             HoroscopeTemplateRepository horoscopeTemplateRepository,
-            PositiveAbstractNounRepository positiveAbstractNounRepository,
-            NegativeAbstractNounRepository negativeAbstractNounRepository)
+            AbstractNounRepository abstractNounRepository)
             : base(
                 user,
                 horoscopeTemplateRepository,
-                positiveAbstractNounRepository,
-                negativeAbstractNounRepository)
+                abstractNounRepository)
         { }
 
         public override HoroscopeReadingTemplate GetHoroscopeTemplate()

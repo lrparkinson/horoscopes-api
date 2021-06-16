@@ -13,20 +13,17 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         protected User user;
         protected Horoscope horoscope;
         protected HoroscopeTemplateRepository horoscopeTemplateRepository;
-        protected PositiveAbstractNounRepository positiveNounRepository;
-        protected NegativeAbstractNounRepository negativeNounRepository;
+        protected AbstractNounRepository abstractNounRepository;
 
 
         public HoroscopeBuilder(
             User user,
             HoroscopeTemplateRepository horoscopeTemplateRepository,
-            PositiveAbstractNounRepository positiveAbstractNounRepository,
-            NegativeAbstractNounRepository negativeAbstractNounRepository)
+            AbstractNounRepository abstractNounRepository)
         {
             this.user = user;
             this.horoscopeTemplateRepository = horoscopeTemplateRepository;
-            this.positiveNounRepository = positiveAbstractNounRepository;
-            this.negativeNounRepository = negativeAbstractNounRepository;
+            this.abstractNounRepository = abstractNounRepository;
         }
 
         public Horoscope CreateHoroscopeBase()
@@ -58,8 +55,8 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
 
         public async void PopulateRandomWords()
         {
-            string postiveAbstractNoun = (await positiveNounRepository.GetRandomPositiveAbstractNoun()).Value.ToLower();
-            string negativeAbstractNoun = (await negativeNounRepository.GetRandomNegativeAbstractNoun()).Value.ToLower();
+            string postiveAbstractNoun = (await abstractNounRepository.GetRandomAbstractNoun(true)).Value.ToLower();
+            string negativeAbstractNoun = (await abstractNounRepository.GetRandomAbstractNoun(false)).Value.ToLower();
             this.horoscope.Reading = this.horoscope.Reading.Replace(positiveNounKey, postiveAbstractNoun);
             this.horoscope.Reading = this.horoscope.Reading.Replace(negativeNounKey, negativeAbstractNoun);
         }
