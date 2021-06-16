@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using totally_legit_horoscopes_api.Models;
+using totally_legit_horoscopes_api.DataAccess;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -16,18 +17,22 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly IHobbyRepository hobbyRepository;
 
         public HobbiesController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            hobbyRepository = new HobbyRepository(context);
         }
 
         // GET: api/Hobbies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HobbyDTO>>> GetHobbies()
+        public async Task<IEnumerable<HobbyDTO>> GetHobbies()
         {
-            return await _context.Hobbies.Select(hobby => _mapper.Map<HobbyDTO>(hobby)).ToListAsync();
+            IEnumerable<Hobby> hobbies = await hobbyRepository.GetAll();
+
+            return hobbies.Select(hobby => _mapper.Map<HobbyDTO>(hobby));
         }
     }
 }

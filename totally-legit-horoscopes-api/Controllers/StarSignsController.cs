@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using totally_legit_horoscopes_api.Models;
+using totally_legit_horoscopes_api.DataAccess;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -16,18 +17,22 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly IStarSignRepository starSignRepository;
+
 
         public StarSignsController(TotallyLegitHoroscopesContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            starSignRepository = new StarSignRepository(_context);
         }
 
         // GET: api/StarSigns
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StarSignDTO>>> GetStarSigns()
+        public async Task<IEnumerable<StarSignDTO>> GetStarSigns()
         {
-            return await _context.StarSigns.Select(sign => _mapper.Map<StarSignDTO>(sign)).ToListAsync();
+            IEnumerable<StarSign> starSigns = await starSignRepository.GetAll();
+            return starSigns.Select(profession => _mapper.Map<StarSignDTO>(profession));
         }
 
         // GET: api/StarSigns/5
