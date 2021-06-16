@@ -29,6 +29,7 @@ namespace totally_legit_horoscopes_api
             services.AddScoped<IStarSignRepository, StarSignRepository>();
             services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
             services.AddScoped<IHoroscopeTemplateRepository, HoroscopeTemplateRepository>();
+            services.AddScoped<IProfessionRepository, ProfessionRepository>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>

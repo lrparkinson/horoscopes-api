@@ -2,7 +2,7 @@
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
-    interface IProfessionRepository:IGenericRepository<Profession>
+    public interface IProfessionRepository:IGenericRepository<Profession>
     {
     }
 }
