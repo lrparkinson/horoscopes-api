@@ -16,19 +16,19 @@ namespace totally_legit_horoscopes_api.Controllers
     public class ProfessionsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IProfessionRepository professionRepository;
+        private readonly IProfessionRepository _professionRepository;
 
         public ProfessionsController(IProfessionRepository professionRepository, IMapper mapper)
         {
             _mapper = mapper;
-            professionRepository = professionRepository;
+            _professionRepository = professionRepository;
         }
 
         // GET: api/Professions
         [HttpGet]
         public async Task<IEnumerable<ProfessionDTO>> GetProfessions()
         {
-            IEnumerable<Profession> professions = await professionRepository.GetAll();
+            IEnumerable<Profession> professions = await _professionRepository.GetAll();
             return professions.Select(profession => _mapper.Map<ProfessionDTO>(profession));
         }
     }
