@@ -65,13 +65,13 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         {
             knownDataKeyDictionary = new Dictionary<string, string>()
                                         {
-                                            //{ "{star_sign}", user.StarSign.Name },
-                                            //{ "{occupation}", user.Profession.Name },
-                                            //{ "{ruling_planet}", user.StarSign.RulingPlanet },
-                                            //{ "{hobby}", (user.Hobbies.Count > 0 ? user.Hobbies[0].Name : "Doing Nothing") },
-                                            //{ "{favourite_dinosaur}", user.FavoriteDinosaur.Name },
-                                            //{ "{star_sign_element}", user.StarSign.Element }
-            };
+                                            { "{star_sign}", user.StarSign.Name },
+                                            { "{occupation}", user.Profession.Name },
+                                            { "{ruling_planet}", user.StarSign.RulingPlanet },
+                                            { "{hobby}", (user.Hobbies.Count > 0 ? user.Hobbies[0].Name : "Doing Nothing") },
+                                            { "{favourite_dinosaur}", user.FavoriteDinosaur.Name },
+                                            { "{star_sign_element}", user.StarSign.Element }
+                                        };
         }
 
     }
