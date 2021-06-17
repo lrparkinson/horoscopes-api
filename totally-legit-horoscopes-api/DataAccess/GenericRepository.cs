@@ -43,5 +43,10 @@ namespace totally_legit_horoscopes_api.DataAccess
             context.Set<T>().Update(entity);
             return true;
         }
+
+        public async void Save()
+        {
+            await context.SaveChangesAsync();
+        }
     }
 }
