@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace totally_legit_horoscopes_api.Models
 {
@@ -20,7 +19,7 @@ namespace totally_legit_horoscopes_api.Models
             this.LifeNumber = LifeNumber;
         }
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserId { get; private set; }
         [Required]
         [EmailAddress]
@@ -29,13 +28,13 @@ namespace totally_legit_horoscopes_api.Models
         public DateTime DateOfBirth { get; set; }
         [Required]
         public int NthChild { get; set; }
-        [Required]
         public Profession Profession { get; set; }
-        [Required]
         public StarSign StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<Hobby> Hobbies { get; set; }
         public LifeNumber LifeNumber { get; set; }
 
+        [Required]
+        public bool Deleted { get; set; }
     }
 }

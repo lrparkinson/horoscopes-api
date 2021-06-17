@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using totally_legit_horoscopes_api.Models;
 
 namespace totally_legit_horoscopes_api.Contexts
@@ -10,6 +6,7 @@ namespace totally_legit_horoscopes_api.Contexts
     public class TotallyLegitHoroscopesContext : DbContext
     {
         public TotallyLegitHoroscopesContext(DbContextOptions<TotallyLegitHoroscopesContext> options) : base(options) { }
+
 
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
@@ -19,8 +16,7 @@ namespace totally_legit_horoscopes_api.Contexts
         public DbSet<AbstractNoun> AbstractNouns { get; set; }
         public DbSet<Dinosaur> Dinosaurs { get; set; }
         public DbSet<HoroscopeReadingTemplate> HoroscopeReadingTemplates { get; set; }
-        public DbSet<StarRatingCategories> StarRatingCategories { get; set; }
-
-
+        public DbSet<HoroscopeReadingTemplateCategory> HoroscopeReadingTemplateCategories { get; set; }
+        public DbSet<StarRatingCategory> StarRatingCategories { get; set; }
     }
 }
