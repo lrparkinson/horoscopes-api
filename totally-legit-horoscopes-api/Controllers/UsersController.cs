@@ -45,8 +45,8 @@ namespace totally_legit_horoscopes_api.Controllers
         }
 
 
-        // GET: api/Users/{id}
-        [HttpGet]
+        // GET: api/Users/1
+        [HttpGet("{1}")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int ID)
         {
             User user = await _userRepository.Get(ID);
