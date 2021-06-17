@@ -6,16 +6,26 @@ using System.Threading.Tasks;
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
-    public class StarSignRepository:GenericRepository<StarSign>, IStarSignRepository
+    public class StarSignRepository : GenericRepository<StarSign>, IStarSignRepository
     {
         public StarSignRepository(TotallyLegitHoroscopesContext context) : base(context)
         {
 
         }
 
-        public async Task<StarSign> getByDate(DateTime date)
+        public async Task<StarSign> GetByDate(DateTime date)
         {
             return await context.StarSigns.SingleAsync(x => x.StartDate <= date && date <= x.EndDate);
+        }
+
+        public async Task<StarSign> GetByValue(string name)
+        {
+            return await context.StarSigns.SingleAsync(x => x.Name.Equals(name));
+        }
+
+        public async Task<StarSign> GetByStartMonth(int monthIndex)
+        {
+            return await context.StarSigns.SingleAsync(starSign => starSign.StartDate.Month == (monthIndex));
         }
     }
 }
