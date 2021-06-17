@@ -24,14 +24,10 @@ namespace totally_legit_horoscopes_api
             this.starSignRepository = starSignRepository;
         }
 
-        public async Task<StarSignMatch> GetOrGenerateRandomMatch()
+        public async Task<StarSignMatch> CreateStarSignMatch()
         {
-            return await CreateStarSignMatch();
-        }
-
-        private async Task<StarSignMatch> CreateStarSignMatch()
-        {
-            this.starSignMatch = new StarSignMatch(this.mainStarSign);
+            this.starSignMatch = new StarSignMatch();
+            this.starSignMatch.MainStarSign = this.mainStarSign;
             this.starSignMatch.DateMatched = DateTime.Now;
             this.starSignMatch.FriendshipMatch = await GenerateRandomMatchAsync();
             this.starSignMatch.CareerMatch = await GenerateRandomMatchAsync();
@@ -41,7 +37,7 @@ namespace totally_legit_horoscopes_api
 
         private bool ValidateRandomMatchAsync(int monthIndex)
         {
-            if (this.starSignMatch.MainStarSign.StartDate.Month == monthIndex
+            if (this.starSignMatch.MainStarSign?.StartDate.Month == monthIndex
                 || this.starSignMatch.LoveMatch?.StartDate.Month == monthIndex
                 || this.starSignMatch.CareerMatch?.StartDate.Month == monthIndex
                 || this.starSignMatch.FriendshipMatch?.StartDate.Month == monthIndex)

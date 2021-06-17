@@ -28,7 +28,7 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async Task<T> Get(long id)
+        public async virtual Task<T> Get(long id)
         {
             T entity = await context.Set<T>().FindAsync(id);
             return entity;
