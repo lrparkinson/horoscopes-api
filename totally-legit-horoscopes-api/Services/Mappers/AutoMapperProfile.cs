@@ -9,7 +9,11 @@ namespace totally_legit_horoscopes_api.Services.Mappers
         public AutoMapperProfile()
         {
             CreateMap<StarSign, StarSignDTO>();
+            CreateMap<StarSignMatch, StarSignMatchDTO>();
             CreateMap<Hobby, HobbyDTO>();
+            CreateMap<HobbyDTO, Hobby>();
+            CreateMap<Dinosaur, DinosaurDTO>();
+            CreateMap<User, UserDTO>();
         }
     }
 }

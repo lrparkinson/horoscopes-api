@@ -21,16 +21,17 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(long id)
         {
             T entity = await Get(id);
             context.Set<T>().Remove(entity);
             return true;
         }
 
-        public async Task<T> Get(int id)
+        public async virtual Task<T> Get(long id)
         {
-            return await context.Set<T>().FindAsync(id);
+            T entity = await context.Set<T>().FindAsync(id);
+            return entity;
         }
 
         public async Task<IEnumerable<T>> GetAll()
@@ -44,9 +45,10 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async void Save()
+        public async Task<bool> Save()
         {
             await context.SaveChangesAsync();
+            return true;
         }
     }
 }

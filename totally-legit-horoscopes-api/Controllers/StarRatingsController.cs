@@ -1,10 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using totally_legit_horoscopes_api.Contexts;
+using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -12,32 +11,33 @@ namespace totally_legit_horoscopes_api.Controllers
     [ApiController]
     public class StarRatingsController : Controller
     {
-        private readonly TotallyLegitHoroscopesContext _context;
-        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+        private readonly IStarRatingsRepository _starRatingsRepository;
+        private readonly long userId = 1;
 
-        public StarRatingsController(TotallyLegitHoroscopesContext context, IMapper mapper)
+        public StarRatingsController(IUserRepository userRepository, IStarRatingsRepository starRatingsRepository)
         {
-            _context = context;
-            _mapper = mapper;
+            _userRepository = userRepository;
+            _starRatingsRepository = starRatingsRepository;
         }
 
-        // GET: api/StarRatings/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IDictionary<string, int>>> GetUserStarRatings(long id)
+        // GET: api/StarRatings
+        [HttpGet]
+        public async Task<ActionResult<IDictionary<string, int>>> GetUserStarRatings()
         {
-            User user = await _context.Users.FindAsync(id);
+            User user = await _userRepository.Get(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(GenerateUserStarRatings(user));
+            return Ok(await GenerateUserStarRatings(user));
         }
 
-        private IDictionary<string, int> GenerateUserStarRatings(User user)
+        private async Task<IDictionary<string, int>> GenerateUserStarRatings(User user)
         {
-            IQueryable<StarRatingCategory> starRatingCategories = _context.StarRatingCategories.Distinct();
-            int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.Profession, user.FavoriteDinosaur);
+            IEnumerable<StarRatingCategory> starRatingCategories = await _starRatingsRepository.GetAll();
+            int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign.Name, user.Profession.Name, user.FavoriteDinosaur.Name);
             Random random = new Random(seed);
             IDictionary<string, int> ratings = new Dictionary<string, int>();
 

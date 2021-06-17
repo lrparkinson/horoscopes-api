@@ -7,7 +7,6 @@ namespace totally_legit_horoscopes_api.Contexts
     {
         public TotallyLegitHoroscopesContext(DbContextOptions<TotallyLegitHoroscopesContext> options) : base(options) { }
 
-
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
         public DbSet<Profession> Professions { get; set; }
@@ -18,5 +17,7 @@ namespace totally_legit_horoscopes_api.Contexts
         public DbSet<HoroscopeReadingTemplate> HoroscopeReadingTemplates { get; set; }
         public DbSet<HoroscopeReadingTemplateCategory> HoroscopeReadingTemplateCategories { get; set; }
         public DbSet<StarRatingCategory> StarRatingCategories { get; set; }
+        public DbSet<StarSignMatch> StarSignMatches { get; set; }
+
     }
 }

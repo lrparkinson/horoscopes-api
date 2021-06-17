@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using totally_legit_horoscopes_api.Models;
 using totally_legit_horoscopes_api.DataAccess;
@@ -15,31 +12,32 @@ namespace totally_legit_horoscopes_api.Controllers
     [ApiController]
     public class StarSignsController : ControllerBase
     {
-        private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
-        private readonly IStarSignRepository starSignRepository;
+        private readonly IStarSignRepository _starSignRepository;
+        private readonly IStarSignMatchRepository _starSignMatchRepository;
 
-
-        public StarSignsController(TotallyLegitHoroscopesContext context, IMapper mapper)
+        public StarSignsController(
+            IStarSignRepository starSignRepository,
+            IStarSignMatchRepository starSignMatchRepository,
+            IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
-            starSignRepository = new StarSignRepository(_context);
+            _starSignRepository = starSignRepository;
+            _starSignMatchRepository = starSignMatchRepository;
         }
 
         // GET: api/StarSigns
         [HttpGet]
-        public async Task<IEnumerable<StarSignDTO>> GetStarSigns()
+        public async Task<ActionResult<IEnumerable<StarSignDTO>>> GetStarSigns()
         {
-            IEnumerable<StarSign> starSigns = await starSignRepository.GetAll();
-            return starSigns.Select(profession => _mapper.Map<StarSignDTO>(profession));
+            return Ok(await _starSignRepository.GetAll());
         }
 
         // GET: api/StarSigns/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StarSignDTO>> GetStarSign(string id)
+        [HttpGet("{starSignName}")]
+        public async Task<ActionResult<StarSignDTO>> GetStarSign(string starSignName)
         {
-            var starSign = await _context.StarSigns.FindAsync(id);
+            var starSign = await _starSignRepository.GetByValue(starSignName);
 
             if (starSign == null)
             {
@@ -47,6 +45,23 @@ namespace totally_legit_horoscopes_api.Controllers
             }
 
             return _mapper.Map<StarSignDTO>(starSign);
+        }
+
+        // GET: api/StarSigns/5/matches
+        [HttpGet("{starSignName}/MatchesForToday")]
+        public async Task<ActionResult<StarSignMatch>> GetStarSignMatch(string starSignName)
+        {
+            var starSign = await _starSignRepository.GetByValue(starSignName);
+
+            if (starSign == null)
+            {
+                return NotFound();
+            }
+
+            StarSignMatch match = await _starSignMatchRepository.GetOrCreateStarSignMatch(starSign, _starSignRepository);
+
+            StarSignMatchDTO matchDTO =_mapper.Map<StarSignMatchDTO>(match);
+            return Ok(matchDTO);
         }
     }
 }

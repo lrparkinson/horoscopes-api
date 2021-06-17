@@ -8,6 +8,7 @@ using System;
 using Npgsql;
 using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.Services;
+using totally_legit_horoscopes_api.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -16,6 +17,8 @@ namespace totally_legit_horoscopes_api
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,8 +34,8 @@ namespace totally_legit_horoscopes_api
                 opts.AddPolicy("AllowAll", builder =>
                 {
                     builder.AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
                     //.AllowCredentials();
                 });
             });
@@ -49,7 +52,19 @@ namespace totally_legit_horoscopes_api
                     ValidateAudience = false
                 };
             });
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
+            services.AddScoped<IStarRatingsRepository, StarRatingsRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IStarSignRepository, StarSignRepository>();
+            services.AddScoped<IStarSignMatchRepository, StarSignMatchRepository>();
+            services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
+            services.AddScoped<IHoroscopeTemplateRepository, HoroscopeTemplateRepository>();
+            services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<IHobbyRepository, HobbyRepository>();
+            services.AddScoped<IDinosaurRepository, DinosaurRepository>();
+            services.AddScoped<IAbstractNounRepository, AbstractNounRepository>();
+            services.AddScoped<ILifeNumberRepository, LifeNumberRepository>();
+            services.AddScoped<IHoroscopeServices, HoroscopeService>();
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -68,14 +83,17 @@ namespace totally_legit_horoscopes_api
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Totally Legit Horoscopes v1");
                 c.RoutePrefix = string.Empty;
-             });
+            });
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
