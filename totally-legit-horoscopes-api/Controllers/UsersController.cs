@@ -22,18 +22,22 @@ namespace totally_legit_horoscopes_api.Controllers
         private readonly IHoroscopeRepository _horoscopeRepository;
 
         private readonly ILifeNumberRepository _lifeNumberRepository;
+        private readonly IDinosaurRepository _dinosaurRepository;
 
         public UsersController(
             IUserRepository userRepository,
             IStarSignRepository starSignRepository,
             IHoroscopeRepository horoscopeRepository,
-            ILifeNumberRepository _lifeNumberRepository,
+            ILifeNumberRepository lifeNumberRepository,
+            IDinosaurRepository dinosaurRepository,
             IMapper mapper)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _starSignRepository = starSignRepository;
             _horoscopeRepository = horoscopeRepository;
+            _lifeNumberRepository = lifeNumberRepository;
+            _dinosaurRepository = dinosaurRepository;
 
         }
 
@@ -46,29 +50,43 @@ namespace totally_legit_horoscopes_api.Controllers
 
 
         // GET: api/Users/1
-        [HttpGet("{1}")]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int ID)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int id)
         {
-            User user = await _userRepository.Get(ID);
+            User user = await _userRepository.Get(id);
             return Ok(_mapper.Map<UserDTO>(user));
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> CreateUser(UserDTO user)
+        [HttpPut]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> UpdateUser(string email, UserDTO user)
         {
+            // TODO:
+            // change this to update things
             List<Hobby> mappedHobbies = user.Hobbies.Select(hobby => _mapper.Map<Hobby>(hobby)).ToList();
             Profession mappedProfession = _mapper.Map<Profession>(user.Profession);
             LifeNumber LifeNumber = await _lifeNumberRepository.Get(calculateLifeNumber(user.DateOfBirth));
-            // TODO: create lifenumber model/table with meanings for each lifenumber
-            // see https://www.numerology.com/articles/your-numerology-chart/life-path-number/
             StarSign starSign = await getStarSignOfDate(user.DateOfBirth);
-            User dbUser = new User(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies, LifeNumber);
+            Dinosaur dinosaur = await _dinosaurRepository.Get(user.FavoriteDinosaur.Name);
+            User dbUser = await _userRepository.GetByEmail(user.Email);
+            dbUser.updateUser(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, dinosaur, mappedHobbies, LifeNumber);
 
-            await _userRepository.Add(dbUser);
-            _userRepository.Save();
+            await _userRepository.Update(dbUser);
+            await _userRepository.Save();
 
-            return CreatedAtAction("CreateUser", new { id = dbUser.UserId }, user);
+            return Ok();
         }
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> CreateUser(string email)
+        {
+            User user = new User(email);
+            await _userRepository.Add(user);
+            await _userRepository.Save();
+
+            return Ok();
+        }
+
+
 
         private bool dateInStarSign(DateTime date, StarSign starSign)
         {
@@ -105,13 +123,12 @@ namespace totally_legit_horoscopes_api.Controllers
             int reducedDay = reduceInt(day);
 
             int lifeNumber = reduceInt(reducedYear + reducedMonth + reducedDay);
-
             return lifeNumber;
         }
 
         private int reduceInt(int value)
         {
-            if (value == 11 || value == 22) //Master numbers
+            if (value == 11 || value == 22 || value == 33 || value < 10) //Master numbers
             {
                 return value;
             }
@@ -122,7 +139,8 @@ namespace totally_legit_horoscopes_api.Controllers
             {
                 result += int.Parse(digit.ToString());
             }
-            return result;
+
+            return reduceInt(result);
         }
     }
 }
