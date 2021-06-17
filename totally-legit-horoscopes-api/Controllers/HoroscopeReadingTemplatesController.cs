@@ -16,48 +16,13 @@ namespace totally_legit_horoscopes_api.Controllers
     [ApiController]
     public class HoroscopeReadingTemplatesController : ControllerBase
     {
-        private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
-        private readonly HoroscopeTemplateRepository _horoscopeTemplateRepository;
+        private readonly IHoroscopeTemplateRepository _horoscopeTemplateRepository;
 
-        public HoroscopeReadingTemplatesController(TotallyLegitHoroscopesContext context, IMapper mapper)
+        public HoroscopeReadingTemplatesController(IHoroscopeTemplateRepository horoscopeTemplateRepository, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
-            _horoscopeTemplateRepository = new HoroscopeTemplateRepository(context);
-        }
-
-        // GET: api/HoroscopeReadingTemplates
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<HoroscopeReadingTemplateDTO>>> GetHoroscopeReadingTemplates()
-        {
-            return await _context.HoroscopeReadingTemplates.Select(HoroscopeReadingTemplate => _mapper.Map<HoroscopeReadingTemplateDTO>(HoroscopeReadingTemplate))
-                                                           .ToListAsync();
-        }
-
-        // GET: api/HoroscopeReadingTemplates/General
-        [HttpGet("General")]
-        public HoroscopeReadingTemplateDTO GetGeneralHoroscopeReadingTemplates()
-        {
-            return _mapper.Map<HoroscopeReadingTemplateDTO>(_horoscopeTemplateRepository.GetGeneralHoroscope());
-        }
-
-        // GET: api/HoroscopeReadingTemplates/Love
-        [HttpGet("Love")]
-        public async Task<ActionResult<IEnumerable<HoroscopeReadingTemplateDTO>>> GetLoveHoroscopeReadingTemplates()
-        {
-            return await _context.HoroscopeReadingTemplates.Where(horoscopeTemplate => horoscopeTemplate.Category.Equals("Love"))
-                                                           .Select(HoroscopeReadingTemplate => _mapper.Map<HoroscopeReadingTemplateDTO>(HoroscopeReadingTemplate))
-                                                           .ToListAsync();
-        }
-
-        // GET: api/HoroscopeReadingTemplates/Career
-        [HttpGet("Career")]
-        public async Task<ActionResult<IEnumerable<HoroscopeReadingTemplateDTO>>> GetCareerHoroscopeReadingTemplates()
-        {
-            return await _context.HoroscopeReadingTemplates.Where(horoscopeTemplate => horoscopeTemplate.Category.Equals("Career"))
-                                                           .Select(HoroscopeReadingTemplate => _mapper.Map<HoroscopeReadingTemplateDTO>(HoroscopeReadingTemplate))
-                                                           .ToListAsync();
+            _horoscopeTemplateRepository = horoscopeTemplateRepository;
         }
     }
 }
