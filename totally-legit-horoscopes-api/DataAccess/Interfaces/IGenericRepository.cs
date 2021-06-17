@@ -11,5 +11,6 @@ namespace totally_legit_horoscopes_api.DataAccess
         Task<bool> Delete(long id);
         Task<bool> Update(T entity);
         Task<bool> Save();
+
     }
 }

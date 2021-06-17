@@ -13,5 +13,6 @@ namespace totally_legit_horoscopes_api.DTOs
         public StarSignDTO StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<HobbyDTO> Hobbies { get; set; }
+        public LifeNumber LifeNumber { get; set; }
     }
 }

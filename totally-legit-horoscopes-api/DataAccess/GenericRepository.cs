@@ -30,7 +30,8 @@ namespace totally_legit_horoscopes_api.DataAccess
 
         public async Task<T> Get(long id)
         {
-            return await context.Set<T>().FindAsync(id);
+            T entity = await context.Set<T>().FindAsync(id);
+            return entity;
         }
 
         public async Task<IEnumerable<T>> GetAll()

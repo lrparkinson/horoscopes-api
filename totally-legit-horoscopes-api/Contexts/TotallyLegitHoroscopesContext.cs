@@ -7,7 +7,6 @@ namespace totally_legit_horoscopes_api.Contexts
     {
         public TotallyLegitHoroscopesContext(DbContextOptions<TotallyLegitHoroscopesContext> options) : base(options) { }
 
-
         public DbSet<User> Users { get; set; }
         public DbSet<StarSign> StarSigns { get; set; }
         public DbSet<Profession> Professions { get; set; }
