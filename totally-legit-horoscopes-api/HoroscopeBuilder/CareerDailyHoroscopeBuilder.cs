@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
+using totally_legit_horoscopes_api.Services.Mappers;
 
 namespace totally_legit_horoscopes_api.HoroscopeBuilder
 {
@@ -36,7 +37,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             {
                 string nthChildDetails = (user.NthChild <= 1)
                                                 ? " Being an only child means you're able to stand on your own 2 feet. Leverage this."
-                                                : " Being one of " + user.NthChild.ToString() + " children means you have experience delegating. Use it to thrive in you career.";
+                                                : " Being the " + GeneralMappers.CardinalToOrndinal(user.NthChild) + " child means you have experience delegating. Use it to thrive in you career.";
                 this.horoscope.Reading += nthChildDetails;
             }
 
