@@ -8,16 +8,16 @@ namespace totally_legit_horoscopes_api.Models
     public class User
     {
         public User(){}
-        public User(string Email,  string Password, DateTime Dob, int NthChild, Profession Profession, StarSign StarSign, Dinosaur FavoriteDinosaur, List<Hobby> Hobbies)  
+        public User(string Email, DateTime DateOfBirth, int NthChild, Profession Profession, StarSign StarSign, Dinosaur FavoriteDinosaur, List<Hobby> Hobbies, int LifeNumber)  
         {
             this.Email = Email;
-            this.Password = Password;
-            this.Dob = Dob;
+            this.Dob = DateOfBirth;
             this.NthChild = NthChild;
             this.FavoriteDinosaur = FavoriteDinosaur;
             this.Profession = Profession;
             this.StarSign = StarSign;
             this.Hobbies = Hobbies;
+            this.LifeNumber = LifeNumber;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,8 +25,6 @@ namespace totally_legit_horoscopes_api.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
         [Required]
         public DateTime Dob { get; set; }
         [Required]
@@ -37,6 +35,7 @@ namespace totally_legit_horoscopes_api.Models
         public StarSign StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<Hobby> Hobbies { get; set; }
+        public int LifeNumber { get; set; }
 
     }
 }

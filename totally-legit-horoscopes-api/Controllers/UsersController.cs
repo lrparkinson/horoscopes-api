@@ -49,7 +49,7 @@ namespace totally_legit_horoscopes_api.Controllers
             // TODO: create lifenumber model/table with meanings for each lifenumber
             // see https://www.numerology.com/articles/your-numerology-chart/life-path-number/
             StarSign starSign = await getStarSignOfDate(user.Dob);
-            User dbUser = new User(user.Email, "password", user.Dob, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies);
+            User dbUser = new User(user.Email, user.Dob, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies, LifeNumber);
 
             await _userRepository.Add(dbUser);
             _userRepository.Save();
