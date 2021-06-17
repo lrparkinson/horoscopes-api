@@ -59,7 +59,7 @@ namespace totally_legit_horoscopes_api.Controllers
 
         private bool dateInStarSign(DateTime date, StarSign starSign)
         {
-            if (date.DayOfYear >= starSign.StartDate.DayOfYear && date.DayOfYear <= starSign.StartDate.DayOfYear)
+            if (date.DayOfYear >= starSign.StartDate.DayOfYear && date.DayOfYear <= starSign.EndDate.DayOfYear)
             {
                 return true;
             }
