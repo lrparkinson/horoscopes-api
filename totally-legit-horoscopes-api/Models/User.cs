@@ -25,7 +25,6 @@ namespace totally_legit_horoscopes_api.Models
             this.LifeNumber = LifeNumber;
         }
         [Key]
-        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; private set; }
         [Required]
         [EmailAddress]
