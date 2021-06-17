@@ -8,6 +8,7 @@ using totally_legit_horoscopes_api.Contexts;
 using totally_legit_horoscopes_api.DTOs;
 using totally_legit_horoscopes_api.Models;
 using System;
+using totally_legit_horoscopes_api.DataAccess;
 
 namespace totally_legit_horoscopes_api.Controllers
 {
@@ -15,20 +16,28 @@ namespace totally_legit_horoscopes_api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly TotallyLegitHoroscopesContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+        private readonly IStarSignRepository _starSignRepository;
+        private readonly IHoroscopeRepository _horoscopeRepository;
 
-        public UsersController(TotallyLegitHoroscopesContext context, IMapper mapper)
+        public UsersController(
+            IUserRepository userRepository,
+            IStarSignRepository starSignRepository,
+            IHoroscopeRepository horoscopeRepository,
+            IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
+            _userRepository = userRepository;
+            _starSignRepository = starSignRepository;
+            _horoscopeRepository = horoscopeRepository;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            return await _context.Users.Select(user => _mapper.Map<UserDTO>(user)).ToListAsync();
+            return Ok((await _userRepository.GetAll()).Select(user => _mapper.Map<UserDTO>(user)));
         }
 
         [HttpPost]
@@ -39,11 +48,11 @@ namespace totally_legit_horoscopes_api.Controllers
             int LifeNumber = calculateLifeNumber(user.Dob);
             // TODO: create lifenumber model/table with meanings for each lifenumber
             // see https://www.numerology.com/articles/your-numerology-chart/life-path-number/
-            
-            User dbUser = new User(user.Email, "password", user.Dob, user.NthChild, mappedProfession, getStarSignOfDate(user.Dob), user.FavoriteDinosaur, mappedHobbies);
+            StarSign starSign = await getStarSignOfDate(user.Dob);
+            User dbUser = new User(user.Email, "password", user.Dob, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies);
 
-            _context.Users.Add(dbUser);
-            await _context.SaveChangesAsync();
+            await _userRepository.Add(dbUser);
+            _userRepository.Save();
 
             return CreatedAtAction("CreateUser", new { id = dbUser.UserId }, user);
         }
@@ -58,9 +67,9 @@ namespace totally_legit_horoscopes_api.Controllers
             return false;
         }
 
-        private StarSign getStarSignOfDate(DateTime date)
+        private async Task<StarSign> getStarSignOfDate(DateTime date)
         {
-            var StarSigns = _context.StarSigns;
+            var StarSigns = await _starSignRepository.GetAll();
             foreach (StarSign starSign in StarSigns)
             {
                 if (dateInStarSign(date, starSign))
