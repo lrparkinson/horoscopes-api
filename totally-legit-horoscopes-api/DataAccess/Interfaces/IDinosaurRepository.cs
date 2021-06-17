@@ -2,7 +2,7 @@
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
-    interface IDinosaurRepository: IGenericRepository<Dinosaur>
+    public interface IDinosaurRepository: IGenericRepository<Dinosaur>
     {
     }
 }
