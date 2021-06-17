@@ -21,16 +21,20 @@ namespace totally_legit_horoscopes_api.Controllers
         private readonly IStarSignRepository _starSignRepository;
         private readonly IHoroscopeRepository _horoscopeRepository;
 
+        private readonly ILifeNumberRepository _lifeNumberRepository;
+
         public UsersController(
             IUserRepository userRepository,
             IStarSignRepository starSignRepository,
             IHoroscopeRepository horoscopeRepository,
+            ILifeNumberRepository _lifeNumberRepository,
             IMapper mapper)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _starSignRepository = starSignRepository;
             _horoscopeRepository = horoscopeRepository;
+
         }
 
         // GET: api/Users
@@ -40,16 +44,25 @@ namespace totally_legit_horoscopes_api.Controllers
             return Ok((await _userRepository.GetAll()).Select(user => _mapper.Map<UserDTO>(user)));
         }
 
+
+        // GET: api/Users/{id}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int ID)
+        {
+            User user = await _userRepository.Get(ID);
+            return Ok(_mapper.Map<UserDTO>(user));
+        }
+
         [HttpPost]
         public async Task<ActionResult<IEnumerable<UserDTO>>> CreateUser(UserDTO user)
         {
             List<Hobby> mappedHobbies = user.Hobbies.Select(hobby => _mapper.Map<Hobby>(hobby)).ToList();
             Profession mappedProfession = _mapper.Map<Profession>(user.Profession);
-            int LifeNumber = calculateLifeNumber(user.Dob);
+            LifeNumber LifeNumber = await _lifeNumberRepository.Get(calculateLifeNumber(user.DateOfBirth));
             // TODO: create lifenumber model/table with meanings for each lifenumber
             // see https://www.numerology.com/articles/your-numerology-chart/life-path-number/
-            StarSign starSign = await getStarSignOfDate(user.Dob);
-            User dbUser = new User(user.Email, user.Dob, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies, LifeNumber);
+            StarSign starSign = await getStarSignOfDate(user.DateOfBirth);
+            User dbUser = new User(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, user.FavoriteDinosaur, mappedHobbies, LifeNumber);
 
             await _userRepository.Add(dbUser);
             _userRepository.Save();
