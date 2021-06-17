@@ -7,7 +7,10 @@ using Microsoft.OpenApi.Models;
 using System;
 using Npgsql;
 using totally_legit_horoscopes_api.Contexts;
+using totally_legit_horoscopes_api.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace totally_legit_horoscopes_api
 {
@@ -23,6 +26,30 @@ namespace totally_legit_horoscopes_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opts =>
+            {
+                opts.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    //.AllowCredentials();
+                });
+            });
+            services.AddAuthentication().AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:JwtSecret"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            services.AddScoped<IAuthService, AuthService>();
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

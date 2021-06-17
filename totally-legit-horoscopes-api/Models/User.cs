@@ -24,5 +24,11 @@ namespace totally_legit_horoscopes_api.Models
         public StarSign StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<Hobby> Hobbies { get; set; }
+        public string OAuthSubject { get; set; }
+        public string OAuthIssuer { get; set; }
+    }
+    public class UserView
+    {
+        public string tokenId { get; set; }
     }
 }
