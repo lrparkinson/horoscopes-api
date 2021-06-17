@@ -7,34 +7,35 @@ using totally_legit_horoscopes_api.Models;
 
 namespace totally_legit_horoscopes_api
 {
-    public class GenerateStarSignMatches
+    public class GenerateStarSignMatchesService
     {
         private const int NUMBER_OF_MONTHS = 12;
         private Random random;
         private IEnumerable<StarSign> starSigns;
-        private User user;
-        private StarSignRepository starSignRepository;
+        private StarSign mainStarSign;
+        private IStarSignRepository starSignRepository;
         private StarSignMatch starSignMatch;
 
 
-        public GenerateStarSignMatches(User user, StarSignRepository starSignRepository)
+        public GenerateStarSignMatchesService(StarSign mainStarSign, IStarSignRepository starSignRepository)
         {
             this.random = new Random();
-            this.user = user;
+            this.mainStarSign = mainStarSign;
             this.starSignRepository = starSignRepository;
         }
 
-        private async Task<StarSignMatch> GetOrGenerateRandomMatch()
+        public async Task<StarSignMatch> GetOrGenerateRandomMatch()
         {
             return await CreateStarSignMatch();
         }
 
         private async Task<StarSignMatch> CreateStarSignMatch()
         {
-            this.starSignMatch = new StarSignMatch(user.StarSign);
-            starSignMatch.FriendshipMatch = await GenerateRandomMatchAsync();
-            starSignMatch.CareerMatch = await GenerateRandomMatchAsync();
-            starSignMatch.LoveMatch = await GenerateRandomMatchAsync();
+            this.starSignMatch = new StarSignMatch(this.mainStarSign);
+            this.starSignMatch.DateMatched = DateTime.Now;
+            this.starSignMatch.FriendshipMatch = await GenerateRandomMatchAsync();
+            this.starSignMatch.CareerMatch = await GenerateRandomMatchAsync();
+            this.starSignMatch.LoveMatch = await GenerateRandomMatchAsync();
             return starSignMatch;
         }
 
@@ -66,7 +67,7 @@ namespace totally_legit_horoscopes_api
                 monthIndex = this.random.Next(NUMBER_OF_MONTHS);
             }
 
-            return starSigns.Where(starSign => starSign.StartDate.Month == (monthIndex)).First();
+            return await starSignRepository.GetByStartMonth(monthIndex);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace totally_legit_horoscopes_api.Models
             this.MainStarSign = mainStarSign;
         }
 
+        public DateTime DateMatched { get; set; }
         public StarSign MainStarSign { get; set; }
         public StarSign LoveMatch { get; set; }
         public StarSign CareerMatch { get; set; }
