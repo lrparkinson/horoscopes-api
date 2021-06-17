@@ -30,6 +30,9 @@ namespace totally_legit_horoscopes_api
             services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
             services.AddScoped<IHoroscopeTemplateRepository, HoroscopeTemplateRepository>();
             services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<IHobbyRepository, HobbyRepository>();
+            services.AddScoped<IDinosaurRepository, DinosaurRepository>();
+            services.AddScoped<IAbstractNounRepository, AbstractNounRepository>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
