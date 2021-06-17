@@ -50,32 +50,43 @@ namespace totally_legit_horoscopes_api.Controllers
 
 
         // GET: api/Users/1
-        [HttpGet("{1}")]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int ID)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUserByID(int id)
         {
-            User user = await _userRepository.Get(ID);
+            User user = await _userRepository.Get(id);
             return Ok(_mapper.Map<UserDTO>(user));
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> CreateUser(UserDTO user)
+        [HttpPut]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> UpdateUser(string email, UserDTO user)
         {
+            // TODO:
+            // change this to update things
             List<Hobby> mappedHobbies = user.Hobbies.Select(hobby => _mapper.Map<Hobby>(hobby)).ToList();
             Profession mappedProfession = _mapper.Map<Profession>(user.Profession);
             LifeNumber LifeNumber = await _lifeNumberRepository.Get(calculateLifeNumber(user.DateOfBirth));
-            Console.WriteLine("LIFENUMBER");
-            Console.WriteLine(LifeNumber.LifeNumberInt);
-            Console.WriteLine(LifeNumber.Description);
             StarSign starSign = await getStarSignOfDate(user.DateOfBirth);
             Dinosaur dinosaur = await _dinosaurRepository.Get(user.FavoriteDinosaur.Name);
-            User dbUser = new User(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, dinosaur, mappedHobbies, LifeNumber);
+            User dbUser = await _userRepository.GetByEmail(user.Email);
+            dbUser.updateUser(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, dinosaur, mappedHobbies, LifeNumber);
 
-            await _userRepository.Add(dbUser);
+            await _userRepository.Update(dbUser);
             await _userRepository.Save();
 
             return Ok();
-            // return CreatedAtAction("CreateUser", new { id = dbUser.UserId }, _mapper.Map<UserDTO>(dbUser));
         }
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> CreateUser(string email)
+        {
+            User user = new User(email);
+            await _userRepository.Add(user);
+            await _userRepository.Save();
+
+            return Ok();
+        }
+
+
 
         private bool dateInStarSign(DateTime date, StarSign starSign)
         {

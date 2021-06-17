@@ -31,7 +31,6 @@ namespace totally_legit_horoscopes_api.DataAccess
         public async Task<T> Get(int id)
         {
             T entity = await context.Set<T>().FindAsync(id);
-            context.Entry(entity).State = EntityState.Unchanged;
             return entity;
         }
 
