@@ -36,6 +36,7 @@ namespace totally_legit_horoscopes_api
                               });
         });
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
+            services.AddScoped<IStarRatingsRepository, StarRatingsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStarSignRepository, StarSignRepository>();
             services.AddScoped<IStarSignMatchRepository, StarSignMatchRepository>();
