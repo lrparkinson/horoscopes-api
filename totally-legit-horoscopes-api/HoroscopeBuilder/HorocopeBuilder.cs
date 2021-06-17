@@ -38,13 +38,6 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             return horoscope;
         }
 
-        public void ConstructFullHoroscope()
-        {
-            this.CreateHoroscopeBase();
-            this.PopulateUserInfo();
-            this.PopulateRandomWords();
-        }
-
         public abstract HoroscopeReadingTemplate GetHoroscopeTemplate();
 
         public Horoscope GetHoroscope()
@@ -60,7 +53,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             }
         }
 
-        public async void PopulateRandomWords()
+        public async virtual void PopulateRandomWords()
         {
             if (this.horoscope.Reading.Contains(positiveNounKey) || this.horoscope.Reading.Contains(negativeNounKey))
             {
@@ -83,5 +76,6 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
                                             //{ "{star_sign_element}", user.StarSign.Element }
                                         };
         }
+
     }
 }
