@@ -37,7 +37,7 @@ namespace totally_legit_horoscopes_api.Controllers
         private async Task<IDictionary<string, int>> GenerateUserStarRatings(User user)
         {
             IEnumerable<StarRatingCategory> starRatingCategories = await _starRatingsRepository.GetAll();
-            int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.Profession, user.FavoriteDinosaur);
+            int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign.Name, user.Profession.Name, user.FavoriteDinosaur.Name);
             Random random = new Random(seed);
             IDictionary<string, int> ratings = new Dictionary<string, int>();
 
