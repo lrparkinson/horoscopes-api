@@ -20,6 +20,7 @@ namespace totally_legit_horoscopes_api.Controllers
             _mapper = mapper;
             _professionRepository = professionRepository;
         }
+        [HttpGet]
         public async Task<ActionResult<IList<Profession>>> GetProfessions()
         {
             IEnumerable<Profession> professions = await _professionRepository.GetAll();
