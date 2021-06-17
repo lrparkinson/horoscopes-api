@@ -2,9 +2,9 @@
 
 namespace totally_legit_horoscopes_api.Models
 {
-    public class NegativeAbstractNoun
+    public class HoroscopeReadingTemplateCategory
     {
         [Key]
-        public string Value { get; set; }
+        public string Name { get; set; }
     }
 }

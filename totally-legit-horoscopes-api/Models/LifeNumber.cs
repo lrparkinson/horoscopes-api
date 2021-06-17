@@ -2,9 +2,10 @@
 
 namespace totally_legit_horoscopes_api.Models
 {
-    public class PositiveAbstractNoun
+    public class LifeNumber
     {
         [Key]
-        public string Value { get; set; }
+        public int LifeNumberInt { get; set; }
+        public string Description { get; set; }
     }
 }
