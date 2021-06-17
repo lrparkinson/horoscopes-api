@@ -9,9 +9,9 @@ using totally_legit_horoscopes_api.Constants.Enums;
 
 namespace totally_legit_horoscopes_api.Contexts
 {
-    public class TotallyLegitHoroscopesContext: DbContext
+    public class TotallyLegitHoroscopesContext : DbContext
     {
-        public TotallyLegitHoroscopesContext(DbContextOptions<TotallyLegitHoroscopesContext> options): base(options) { }
+        public TotallyLegitHoroscopesContext(DbContextOptions<TotallyLegitHoroscopesContext> options) : base(options) { }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,7 +20,6 @@ namespace totally_legit_horoscopes_api.Contexts
             modelBuilder.Entity<Profession>().HasData(GetProfessions());
             modelBuilder.Entity<Hobby>().HasData(GetHobbies());
             modelBuilder.Entity<AbstractNoun>().HasData(GetAbstractNouns());
-            modelBuilder.Entity<AbstractNoun>().Property(e => e.Connotation).HasConversion(v => v.ToString(), v => (Connotation)Enum.Parse(typeof(Connotation), v));
             modelBuilder.Entity<Dinosaur>().HasData(GetDinosaurs());
             modelBuilder.Entity<HoroscopeReadingTemplate>().HasData(GetHoroscopeReadingTemplates());
             modelBuilder.Entity<HoroscopeReadingTemplateCategory>().HasData(GetReadingTemplateCategories());

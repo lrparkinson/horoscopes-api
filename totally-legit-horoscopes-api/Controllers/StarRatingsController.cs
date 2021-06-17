@@ -1,5 +1,4 @@
-﻿@@ -0,0 + 1,51 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,9 +42,9 @@ namespace totally_legit_horoscopes_api.Controllers
             IDictionary<string, int> ratings = new Dictionary<string, int>();
 
             starRatingCategories.ToList().ForEach((element) =>
-            {
-                ratings.Add(element.Name, random.Next(0, 6));
-            });
+             {
+                 ratings.Add(element.Name, random.Next(0, 6));
+             });
             return ratings;
         }
     }

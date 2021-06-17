@@ -2,7 +2,7 @@
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
-    interface IHoroscopeRepository:IGenericRepository<Horoscope>
+    public interface IHoroscopeRepository:IGenericRepository<Horoscope>
     {
     }
 }
