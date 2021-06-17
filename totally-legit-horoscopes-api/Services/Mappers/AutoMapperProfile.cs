@@ -12,6 +12,8 @@ namespace totally_legit_horoscopes_api.Services.Mappers
             CreateMap<StarSignMatch, StarSignMatchDTO>();
             CreateMap<Hobby, HobbyDTO>();
             CreateMap<HobbyDTO, Hobby>();
+            CreateMap<Dinosaur, DinosaurDTO>();
+            CreateMap<User, UserDTO>();
         }
     }
 }
