@@ -9,6 +9,7 @@ using Npgsql;
 using totally_legit_horoscopes_api.Contexts;
 using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.DataAccess;
+using totally_legit_horoscopes_api.Services;
 
 namespace totally_legit_horoscopes_api
 {
@@ -34,8 +35,7 @@ namespace totally_legit_horoscopes_api
                                   builder.AllowAnyOrigin();
                               });
         });
-
-            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
+            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStarSignRepository, StarSignRepository>();
             services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
@@ -45,6 +45,7 @@ namespace totally_legit_horoscopes_api
             services.AddScoped<IDinosaurRepository, DinosaurRepository>();
             services.AddScoped<IAbstractNounRepository, AbstractNounRepository>();
             services.AddScoped<ILifeNumberRepository, LifeNumberRepository>();
+            services.AddScoped<IHoroscopeServices, HoroscopeService>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
