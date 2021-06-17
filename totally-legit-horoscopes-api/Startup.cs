@@ -32,7 +32,7 @@ namespace totally_legit_horoscopes_api
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               builder =>
                               {
-                                  builder.AllowAnyOrigin();
+                                  builder.AllowAnyOrigin().AllowAnyMethod();
                               });
         });
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
