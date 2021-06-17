@@ -30,7 +30,9 @@ namespace totally_legit_horoscopes_api.DataAccess
 
         public async Task<T> Get(int id)
         {
-            return await context.Set<T>().FindAsync(id);
+            T entity = await context.Set<T>().FindAsync(id);
+            context.Entry(entity).State = EntityState.Unchanged;
+            return entity;
         }
 
         public async Task<IEnumerable<T>> GetAll()
@@ -44,9 +46,10 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async void Save()
+        public async Task<bool> Save()
         {
             await context.SaveChangesAsync();
+            return true;
         }
     }
 }
