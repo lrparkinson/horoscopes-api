@@ -2,9 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using totally_legit_horoscopes_api.Contexts;
-using totally_legit_horoscopes_api.DTOs;
 using System.Linq;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
@@ -25,13 +23,9 @@ namespace totally_legit_horoscopes_api.Controllers
             _mapper = mapper;
             professionRepository = new ProfessionRepository(_context);
         }
-
-        // GET: api/Professions
-        [HttpGet]
-        public async Task<IEnumerable<ProfessionDTO>> GetProfessions()
+        public ActionResult<IList<Profession>> GetProfessions()
         {
-            IEnumerable<Profession> professions = await professionRepository.GetAll();
-            return professions.Select(profession => _mapper.Map<ProfessionDTO>(profession));
+            return _context.Professions.ToList();
         }
 
     }

@@ -7,6 +7,5 @@ namespace totally_legit_horoscopes_api.Models
     {
         [Key]
         public string Name { get; set; }
-        public virtual ICollection<User> User { get; set; }
     }
 }
