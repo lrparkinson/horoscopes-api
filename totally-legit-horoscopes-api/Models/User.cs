@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace totally_legit_horoscopes_api.Models
 {
@@ -14,13 +13,9 @@ namespace totally_legit_horoscopes_api.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-        [Required]
         public DateTime Dob { get; set; }
-        [Required]
         public int NthChild { get; set; }
-        [Required]
         public Profession Profession { get; set; }
-        [Required]
         public StarSign StarSign { get; set; }
         public Dinosaur FavoriteDinosaur { get; set; }
         public List<Hobby> Hobbies { get; set; }
@@ -30,5 +25,7 @@ namespace totally_legit_horoscopes_api.Models
     public class UserView
     {
         public string tokenId { get; set; }
+        [Required]
+        public bool Deleted { get; set; }
     }
 }
