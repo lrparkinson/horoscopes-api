@@ -25,7 +25,6 @@ namespace totally_legit_horoscopes_api.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: api/Hobbies
         [HttpGet("GeneralHoroscope")]
         public async Task<ActionResult<Horoscope>> CreateOrGetGeneralHoroscope()
         {
