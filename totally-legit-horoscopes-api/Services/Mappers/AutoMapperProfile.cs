@@ -13,6 +13,7 @@ namespace totally_legit_horoscopes_api.Services.Mappers
             CreateMap<Hobby, HobbyDTO>();
             CreateMap<HobbyDTO, Hobby>();
             CreateMap<Dinosaur, DinosaurDTO>();
+            CreateMap<User, UserDTO>();
         }
     }
 }
