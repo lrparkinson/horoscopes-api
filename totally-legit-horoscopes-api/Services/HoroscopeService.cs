@@ -45,9 +45,10 @@ namespace totally_legit_horoscopes_api.Services
                 GeneralDailyHoroscopeBuilder horoscopeBuilder = new GeneralDailyHoroscopeBuilder(
                                                                     user,
                                                                     _horoscopeTemplateRepository,
+                                                                    _starSignRepository,
                                                                     _abstractNounRepository);
                 HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-                horoscopeDirector.ConstructFullHoroscope();
+                await horoscopeDirector.ConstructFullHoroscope();
                 horoscope = horoscopeDirector.GetHoroscope();
                 await _horoscopeRepository.Add(horoscope);
                 await _horoscopeRepository.Save();
@@ -68,7 +69,7 @@ namespace totally_legit_horoscopes_api.Services
                                                                _starSignRepository,
                                                                _abstractNounRepository);
                 HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-                horoscopeDirector.ConstructFullHoroscope();
+                await horoscopeDirector.ConstructFullHoroscope();
                 horoscope = horoscopeDirector.GetHoroscope();
                 await _horoscopeRepository.Add(horoscope);
                 await _horoscopeRepository.Save();
@@ -85,9 +86,10 @@ namespace totally_legit_horoscopes_api.Services
                 CareerDailyHoroscopeBuilder horoscopeBuilder = new CareerDailyHoroscopeBuilder(
                                                                user,
                                                                _horoscopeTemplateRepository,
+                                                               _starSignRepository,
                                                                _abstractNounRepository);
                 HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-                horoscopeDirector.ConstructFullHoroscope();
+                await horoscopeDirector.ConstructFullHoroscope();
                 horoscope = horoscopeDirector.GetHoroscope();
                 await _horoscopeRepository.Add(horoscope);
                 await _horoscopeRepository.Save();

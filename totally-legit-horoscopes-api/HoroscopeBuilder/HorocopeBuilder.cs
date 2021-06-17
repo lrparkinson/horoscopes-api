@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 
@@ -14,28 +15,30 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         protected Horoscope horoscope;
         protected IHoroscopeTemplateRepository horoscopeTemplateRepository;
         protected IAbstractNounRepository abstractNounRepository;
+        protected IStarSignRepository starSignRepository;
 
 
         public HoroscopeBuilder(
             User user,
             IHoroscopeTemplateRepository horoscopeTemplateRepository,
+            IStarSignRepository starSignRepository,
             IAbstractNounRepository abstractNounRepository)
         {
             this.user = user;
             this.horoscopeTemplateRepository = horoscopeTemplateRepository;
             this.abstractNounRepository = abstractNounRepository;
+            this.starSignRepository = starSignRepository;
         }
 
-        public Horoscope CreateHoroscopeBase()
+        public async Task CreateHoroscopeBase()
         {
-            SetupKnownDataDictionary();
+            await SetupKnownDataDictionary();
             horoscope = new Horoscope();
             horoscope.ReadingDate = DateTime.Now;
             horoscope.UserId = this.user.UserId;
             HoroscopeReadingTemplate horoscopeReadingTemplate = GetHoroscopeTemplate();
             horoscope.Category = horoscopeReadingTemplate.Category;
             horoscope.Reading = horoscopeReadingTemplate.Template;
-            return horoscope;
         }
 
         public abstract HoroscopeReadingTemplate GetHoroscopeTemplate();
@@ -53,7 +56,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             }
         }
 
-        public async virtual void PopulateRandomWords()
+        public async virtual Task PopulateRandomWords()
         {
             if (this.horoscope.Reading.Contains(positiveNounKey) || this.horoscope.Reading.Contains(negativeNounKey))
             {
@@ -64,19 +67,22 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             }
         }
 
-        protected void SetupKnownDataDictionary()
+        protected async Task SetupKnownDataDictionary()
         {
+            string randomStarSign = (await starSignRepository.GetRandomStarSign(this.user.StarSign.Name)).Name;
             knownDataKeyDictionary = new Dictionary<string, string>()
                                         {
                                             { "{star_sign}", user.StarSign.Name },
                                             { "{occupation}", user.Profession.Name },
                                             { "{ruling_planet}", user.StarSign.RulingPlanet },
+                                            { "{nth_child}", user.NthChild.ToString() },
                                             { "{hobby}", (user.Hobbies.Count > 0 ? user.Hobbies[0].Name : "Doing Nothing") },
                                             { "{favourite_dinosaur}", user.FavoriteDinosaur.Name },
-                                            { "{star_sign_element}", user.StarSign.Element }
+                                            { "{star_sign_element}", user.StarSign.Element },
+                                            { "{random_star_sign}", randomStarSign}
                                         };
         }
 
-        public abstract void SprinkleInMoreCustomDetails();
+        public abstract Task SprinkleInMoreCustomDetails();
     }
 }
