@@ -14,6 +14,8 @@ namespace totally_legit_horoscopes_api
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,6 +26,15 @@ namespace totally_legit_horoscopes_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              builder =>
+                              {
+                                  builder.AllowAnyOrigin();
+                              });
+        });
+
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStarSignRepository, StarSignRepository>();
@@ -33,6 +44,7 @@ namespace totally_legit_horoscopes_api
             services.AddScoped<IHobbyRepository, HobbyRepository>();
             services.AddScoped<IDinosaurRepository, DinosaurRepository>();
             services.AddScoped<IAbstractNounRepository, AbstractNounRepository>();
+            services.AddScoped<ILifeNumberRepository, LifeNumberRepository>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
@@ -50,14 +62,17 @@ namespace totally_legit_horoscopes_api
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Totally Legit Horoscopes v1");
                 c.RoutePrefix = string.Empty;
-             });
+            });
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

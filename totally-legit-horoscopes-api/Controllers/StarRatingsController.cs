@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +21,6 @@ namespace totally_legit_horoscopes_api.Controllers
             _mapper = mapper;
         }
 
-
-
         // GET: api/StarRatings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IDictionary<string, int>>> GetUserStarRatings(long id)
@@ -38,7 +36,7 @@ namespace totally_legit_horoscopes_api.Controllers
 
         private IDictionary<string, int> GenerateUserStarRatings(User user)
         {
-            IQueryable<StarRatingCategories> starRatingCategories = _context.StarRatingCategories.Distinct();
+            IQueryable<StarRatingCategory> starRatingCategories = _context.StarRatingCategories.Distinct();
             int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.Profession, user.FavoriteDinosaur);
             Random random = new Random(seed);
             IDictionary<string, int> ratings = new Dictionary<string, int>();
