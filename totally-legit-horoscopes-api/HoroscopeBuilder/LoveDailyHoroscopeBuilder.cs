@@ -6,12 +6,17 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
 {
     public class LoveDailyHoroscopeBuilder : HoroscopeBuilder
     {
+        private IStarSignMatchRepository starSignMatchRepository;
+        private IStarSignRepository starSignRepository;
         private const string abstractNounKey = "{abstract_noun}";
         private Random random;
 
         public LoveDailyHoroscopeBuilder(
             User user,
             IHoroscopeTemplateRepository horoscopeTemplateRepository,
+            IStarSignMatchRepository starSignMatchRepository,
+            IStarSignRepository starSignRepository,
+
             IAbstractNounRepository abstractNounRepository)
             : base(
                 user,
@@ -20,6 +25,8 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         {
             int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.NthChild, user.Profession, user.FavoriteDinosaur);
             this.random = new Random(seed);
+            this.starSignMatchRepository = starSignMatchRepository;
+            this.starSignRepository = starSignRepository;
         }
 
         public override HoroscopeReadingTemplate GetHoroscopeTemplate()
@@ -44,6 +51,12 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
 
                 this.horoscope.Reading = this.horoscope.Reading.Replace(abstractNounKey, abstractNoun);
             }
+        }
+
+        public async override void SprinkleInMoreCustomDetails()
+        {
+            StarSignMatch match = await this.starSignMatchRepository.GetOrCreateStarSignMatch(this.user.StarSign, this.starSignRepository);
+            this.horoscope.Reading += string.Format(" Hint: Look to {0} today!", match.LoveMatch.Name);
         }
     }
 }

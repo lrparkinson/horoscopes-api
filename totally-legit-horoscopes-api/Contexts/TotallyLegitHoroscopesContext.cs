@@ -18,5 +18,7 @@ namespace totally_legit_horoscopes_api.Contexts
         public DbSet<HoroscopeReadingTemplate> HoroscopeReadingTemplates { get; set; }
         public DbSet<HoroscopeReadingTemplateCategory> HoroscopeReadingTemplateCategories { get; set; }
         public DbSet<StarRatingCategory> StarRatingCategories { get; set; }
+        public DbSet<StarSignMatch> StarSignMatches { get; set; }
+
     }
 }

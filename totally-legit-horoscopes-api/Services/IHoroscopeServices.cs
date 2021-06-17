@@ -8,9 +8,9 @@ namespace totally_legit_horoscopes_api.Services
 {
     public interface IHoroscopeServices
     {
-        public Task<Horoscope> CreateGeneralHoroscope(User user);
-        public Task<Horoscope> CreateLoveHoroscope(User user);
-        public Task<Horoscope> CreateCareerHoroscope(User user);
+        public Task<Horoscope> CreateOrGetGeneralHoroscope(User user);
+        public Task<Horoscope> CreateOrGetLoveHoroscope(User user);
+        public Task<Horoscope> CreateOrGetCareerHoroscope(User user);
         public Task<List<Horoscope>> GetPastHoroscopes(long userId);
     }
 }

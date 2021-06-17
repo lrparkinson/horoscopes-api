@@ -14,12 +14,16 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IStarSignRepository _starSignRepository;
+        private readonly IStarSignMatchRepository _starSignMatchRepository;
 
-
-        public StarSignsController(IStarSignRepository starSignRepository, IMapper mapper)
+        public StarSignsController(
+            IStarSignRepository starSignRepository,
+            IStarSignMatchRepository starSignMatchRepository,
+            IMapper mapper)
         {
             _mapper = mapper;
             _starSignRepository = starSignRepository;
+            _starSignMatchRepository = starSignMatchRepository;
         }
 
         // GET: api/StarSigns
@@ -54,11 +58,7 @@ namespace totally_legit_horoscopes_api.Controllers
                 return NotFound();
             }
 
-            GenerateStarSignMatchesService generateStarSignMatchesService = new GenerateStarSignMatchesService(
-                                                                                    starSign,
-                                                                                    _starSignRepository);
-
-            StarSignMatch match = await generateStarSignMatchesService.GetOrGenerateRandomMatch();
+            StarSignMatch match = await _starSignMatchRepository.GetOrCreateStarSignMatch(starSign, _starSignRepository);
 
             StarSignMatchDTO matchDTO =_mapper.Map<StarSignMatchDTO>(match);
             return Ok(matchDTO);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
@@ -15,7 +16,14 @@ namespace totally_legit_horoscopes_api.DataAccess
 
         public async Task<List<Horoscope>> GetPastHoroscopes(long userId)
         {
-            return await context.Horoscopes.Where(horoscope => horoscope.User.UserId == userId).ToListAsync();
+            return await context.Horoscopes.Where(horoscope => horoscope.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Horoscope> GetPastHoroscopeForDayAndType(long userId, DateTime dateOfReading, string category)
+        {
+            return await context.Horoscopes.Where(horoscope => horoscope.UserId == userId
+                                                               && horoscope.ReadingDate.Date == dateOfReading.Date
+                                                               && horoscope.Category.Equals(category)).FirstOrDefaultAsync();
         }
     }
 }

@@ -20,5 +20,10 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         {
             return horoscopeTemplateRepository.GetGeneralHoroscope();
         }
+
+        public async override void SprinkleInMoreCustomDetails()
+        {
+
+        }
     }
 }

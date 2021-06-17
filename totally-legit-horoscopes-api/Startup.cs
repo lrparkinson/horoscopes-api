@@ -35,9 +35,10 @@ namespace totally_legit_horoscopes_api
                                   builder.AllowAnyOrigin();
                               });
         });
-            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
+            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStarSignRepository, StarSignRepository>();
+            services.AddScoped<IStarSignMatchRepository, StarSignMatchRepository>();
             services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
             services.AddScoped<IHoroscopeTemplateRepository, HoroscopeTemplateRepository>();
             services.AddScoped<IProfessionRepository, ProfessionRepository>();

@@ -15,7 +15,7 @@ namespace totally_legit_horoscopes_api.Controllers
     {
         private readonly IHoroscopeServices _horoscopeService;
         private readonly IUserRepository _userRepository;
-        private readonly int userId = 1;
+        private readonly int userId = 3;
 
         public HoroscopeController(
             IHoroscopeServices horoscopeService,
@@ -26,46 +26,46 @@ namespace totally_legit_horoscopes_api.Controllers
         }
 
         // GET: api/Hobbies
-        [HttpPost("GeneralHoroscope")]
-        public async Task<ActionResult<Horoscope>> CreateGeneralHoroscope()
+        [HttpGet("GeneralHoroscope")]
+        public async Task<ActionResult<Horoscope>> CreateOrGetGeneralHoroscope()
         {
-            User user = await _userRepository.Get(userId);
+            User user = await _userRepository.GetUserWithFKS(userId);
             if (user == null)
             {
                 return NotFound(user);
             }
 
-            Horoscope horoscope = await _horoscopeService.CreateGeneralHoroscope(user);
+            Horoscope horoscope = await _horoscopeService.CreateOrGetGeneralHoroscope(user);
 
-            return CreatedAtAction("CreateGeneralHoroscope", horoscope);
+            return Ok(horoscope);
         }
 
-        [HttpPost("LoveHoroscope")]
-        public async Task<ActionResult<Horoscope>> CreateLoveHoroscope()
+        [HttpGet("LoveHoroscope")]
+        public async Task<ActionResult<Horoscope>> CreateOrGetLoveHoroscope()
         {
-            User user = await _userRepository.Get(userId);
+            User user = await _userRepository.GetUserWithFKS(userId);
             if (user == null)
             {
                 return NotFound(user);
             }
 
-            Horoscope horoscope = await _horoscopeService.CreateLoveHoroscope(user);
+            Horoscope horoscope = await _horoscopeService.CreateOrGetLoveHoroscope(user);
 
-            return CreatedAtAction("CreateLoveHoroscope", horoscope);
+            return Ok(horoscope);
         }
 
-        [HttpPost("CareerHoroscope")]
-        public async Task<ActionResult<Horoscope>> CreateCareerHoroscope()
+        [HttpGet("CareerHoroscope")]
+        public async Task<ActionResult<Horoscope>> CreateOrGetCareerHoroscope()
         {
-            User user = await _userRepository.Get(userId);
+            User user = await _userRepository.GetUserWithFKS(userId);
             if (user == null)
             {
                 return NotFound(user);
             }
 
-            Horoscope horoscope = await _horoscopeService.CreateCareerHoroscope(user);
+            Horoscope horoscope = await _horoscopeService.CreateOrGetCareerHoroscope(user);
 
-            return CreatedAtAction("CreateCareerHoroscope", horoscope);
+            return Ok(horoscope);
         }
 
         [HttpGet("Horoscopes")]

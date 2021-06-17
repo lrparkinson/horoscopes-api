@@ -16,6 +16,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             this.horoscopeBuilder.CreateHoroscopeBase();
             this.horoscopeBuilder.PopulateUserInfo();
             this.horoscopeBuilder.PopulateRandomWords();
+            this.horoscopeBuilder.SprinkleInMoreCustomDetails();
         }
 
         public Horoscope GetHoroscope()

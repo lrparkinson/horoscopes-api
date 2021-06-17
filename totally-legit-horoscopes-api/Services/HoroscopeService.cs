@@ -16,11 +16,14 @@ namespace totally_legit_horoscopes_api.Services
         private readonly IHoroscopeTemplateRepository _horoscopeTemplateRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAbstractNounRepository _abstractNounRepository;
+        private readonly IStarSignMatchRepository _starSignMatchRepository;
+        private readonly IStarSignRepository _starSignRepository;
 
         public HoroscopeService(
             IHoroscopeRepository horoscopeRepository,
             IHoroscopeTemplateRepository horoscopeTemplateRepository,
             IAbstractNounRepository abstractNounRepository,
+            IStarSignMatchRepository starSignMatchRepository,
             IStarSignRepository starSignRepository,
             IUserRepository userRepository
             )
@@ -29,48 +32,67 @@ namespace totally_legit_horoscopes_api.Services
             _horoscopeTemplateRepository = horoscopeTemplateRepository;
             _userRepository = userRepository;
             _abstractNounRepository = abstractNounRepository;
+            _starSignMatchRepository = starSignMatchRepository;
+            _starSignRepository = starSignRepository;
 
         }
 
-        public async Task<Horoscope> CreateGeneralHoroscope(User user)
+        public async Task<Horoscope> CreateOrGetGeneralHoroscope(User user)
         {
-            GeneralDailyHoroscopeBuilder horoscopeBuilder = new GeneralDailyHoroscopeBuilder(
-                                                                user,
-                                                                _horoscopeTemplateRepository,
-                                                                _abstractNounRepository);
-            HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-            horoscopeDirector.ConstructFullHoroscope();
-            Horoscope horoscope = horoscopeDirector.GetHoroscope();
-            await _horoscopeRepository.Add(horoscope);
-            await _horoscopeRepository.Save();
+            Horoscope horoscope = await _horoscopeRepository.GetPastHoroscopeForDayAndType(user.UserId, DateTime.Now.Date, "General");
+            if (horoscope == null)
+            {
+                GeneralDailyHoroscopeBuilder horoscopeBuilder = new GeneralDailyHoroscopeBuilder(
+                                                                    user,
+                                                                    _horoscopeTemplateRepository,
+                                                                    _abstractNounRepository);
+                HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
+                horoscopeDirector.ConstructFullHoroscope();
+                horoscope = horoscopeDirector.GetHoroscope();
+                await _horoscopeRepository.Add(horoscope);
+                await _horoscopeRepository.Save();
+            }
+
             return horoscope;
         }
 
-        public async Task<Horoscope> CreateLoveHoroscope(User user)
+        public async Task<Horoscope> CreateOrGetLoveHoroscope(User user)
         {
-            LoveDailyHoroscopeBuilder horoscopeBuilder = new LoveDailyHoroscopeBuilder(
+            Horoscope horoscope = await _horoscopeRepository.GetPastHoroscopeForDayAndType(user.UserId, DateTime.Now.Date, "Love");
+            if (horoscope == null)
+            {
+                LoveDailyHoroscopeBuilder horoscopeBuilder = new LoveDailyHoroscopeBuilder(
                                                                user,
                                                                _horoscopeTemplateRepository,
+                                                               _starSignMatchRepository,
+                                                               _starSignRepository,
                                                                _abstractNounRepository);
-            HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-            horoscopeDirector.ConstructFullHoroscope();
-            Horoscope horoscope = horoscopeDirector.GetHoroscope();
-            await _horoscopeRepository.Add(horoscope);
-            await _horoscopeRepository.Save();
+                HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
+                horoscopeDirector.ConstructFullHoroscope();
+                horoscope = horoscopeDirector.GetHoroscope();
+                await _horoscopeRepository.Add(horoscope);
+                await _horoscopeRepository.Save();
+            }
+
             return horoscope;
         }
 
-        public async Task<Horoscope> CreateCareerHoroscope(User user)
+        public async Task<Horoscope> CreateOrGetCareerHoroscope(User user)
         {
-            CareerDailyHoroscopeBuilder horoscopeBuilder = new CareerDailyHoroscopeBuilder(
+            Horoscope horoscope = await _horoscopeRepository.GetPastHoroscopeForDayAndType(user.UserId, DateTime.Now.Date, "Career");
+            if (horoscope == null)
+            {
+                CareerDailyHoroscopeBuilder horoscopeBuilder = new CareerDailyHoroscopeBuilder(
                                                                user,
                                                                _horoscopeTemplateRepository,
                                                                _abstractNounRepository);
-            HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
-            horoscopeDirector.ConstructFullHoroscope();
-            Horoscope horoscope = horoscopeDirector.GetHoroscope();
-            await _horoscopeRepository.Add(horoscope);
-            await _horoscopeRepository.Save();
+                HoroscopeDirector horoscopeDirector = new HoroscopeDirector(horoscopeBuilder);
+                horoscopeDirector.ConstructFullHoroscope();
+                horoscope = horoscopeDirector.GetHoroscope();
+                await _horoscopeRepository.Add(horoscope);
+                await _horoscopeRepository.Save();
+            }
+
             return horoscope;
         }
 

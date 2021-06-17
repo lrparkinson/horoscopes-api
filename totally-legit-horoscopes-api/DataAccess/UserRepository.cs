@@ -1,5 +1,7 @@
 ﻿using totally_legit_horoscopes_api.Models;
 using totally_legit_horoscopes_api.Contexts;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
@@ -9,5 +11,15 @@ namespace totally_legit_horoscopes_api.DataAccess
         {
 
         }
+
+        public async Task<User> GetUserWithFKS(long id)
+        {
+            return await context.Users.Include("FavoriteDinosaur")
+                                      .Include("Profession")
+                                      .Include("StarSign")
+                                      .Include("Hobbies")
+                                      .FirstAsync(user => user.UserId == id);
+        }
+
     }
 }
