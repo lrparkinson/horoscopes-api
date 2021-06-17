@@ -8,6 +8,7 @@ using System;
 using Npgsql;
 using totally_legit_horoscopes_api.Contexts;
 using Microsoft.EntityFrameworkCore;
+using totally_legit_horoscopes_api.DataAccess;
 
 namespace totally_legit_horoscopes_api
 {
@@ -23,7 +24,15 @@ namespace totally_legit_horoscopes_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()));
+            services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IStarSignRepository, StarSignRepository>();
+            services.AddScoped<IHoroscopeRepository, HoroscopeRepository>();
+            services.AddScoped<IHoroscopeTemplateRepository, HoroscopeTemplateRepository>();
+            services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<IHobbyRepository, HobbyRepository>();
+            services.AddScoped<IDinosaurRepository, DinosaurRepository>();
+            services.AddScoped<IAbstractNounRepository, AbstractNounRepository>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
