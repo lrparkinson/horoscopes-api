@@ -21,14 +21,14 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(long id)
         {
             T entity = await Get(id);
             context.Set<T>().Remove(entity);
             return true;
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> Get(long id)
         {
             T entity = await context.Set<T>().FindAsync(id);
             return entity;
