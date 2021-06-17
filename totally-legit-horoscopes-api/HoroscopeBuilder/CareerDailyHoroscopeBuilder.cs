@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 
@@ -12,10 +13,12 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         public CareerDailyHoroscopeBuilder(
             User user,
             IHoroscopeTemplateRepository horoscopeTemplateRepository,
+            IStarSignRepository starSignRepository,
             IAbstractNounRepository abstractNounRepository)
             : base(
                 user,
                 horoscopeTemplateRepository,
+                starSignRepository,
                 abstractNounRepository)
         {
             this.random = new Random();
@@ -26,7 +29,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             return horoscopeTemplateRepository.GetCareerHoroscope();
         }
 
-        public override void SprinkleInMoreCustomDetails()
+        public async override Task SprinkleInMoreCustomDetails()
         {
             double probabilityChildhoodDrama = this.random.NextDouble();
             if (probabilityChildhoodDrama < SMALL_PROBABILITY)
@@ -36,6 +39,8 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
                                                 : " Being one of " + user.NthChild.ToString() + " children means you have experience delegating. Use it to thrive in you career.";
                 this.horoscope.Reading += nthChildDetails;
             }
+
+            return;
         }
     }
 }
