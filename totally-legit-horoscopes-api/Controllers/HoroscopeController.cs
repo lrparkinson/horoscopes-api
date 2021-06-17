@@ -29,7 +29,7 @@ namespace totally_legit_horoscopes_api.Controllers
         [HttpGet("GeneralHoroscope")]
         public async Task<ActionResult<Horoscope>> CreateOrGetGeneralHoroscope()
         {
-            User user = await _userRepository.GetUserWithFKS(userId);
+            User user = await _userRepository.Get(userId);
             if (user == null)
             {
                 return NotFound(user);
@@ -43,7 +43,7 @@ namespace totally_legit_horoscopes_api.Controllers
         [HttpGet("LoveHoroscope")]
         public async Task<ActionResult<Horoscope>> CreateOrGetLoveHoroscope()
         {
-            User user = await _userRepository.GetUserWithFKS(userId);
+            User user = await _userRepository.Get(userId);
             if (user == null)
             {
                 return NotFound(user);
@@ -57,7 +57,7 @@ namespace totally_legit_horoscopes_api.Controllers
         [HttpGet("CareerHoroscope")]
         public async Task<ActionResult<Horoscope>> CreateOrGetCareerHoroscope()
         {
-            User user = await _userRepository.GetUserWithFKS(userId);
+            User user = await _userRepository.Get(userId);
             if (user == null)
             {
                 return NotFound(user);

@@ -17,7 +17,7 @@ namespace totally_legit_horoscopes_api.DataAccess
             return await context.Users.SingleAsync(x => x.Email.Equals(Email));
         }
 
-        public async Task<User> Get(long id)
+        public override async Task<User> Get(long id)
         {
             User entity = await context.Users.Include(e => e.Profession).Include(e => e.FavoriteDinosaur).Include(e => e.Hobbies).Include(e => e.StarSign).Include(e => e.LifeNumber).SingleAsync(x => x.UserId == id);
             return entity;

@@ -34,10 +34,10 @@ namespace totally_legit_horoscopes_api.Controllers
         }
 
         // GET: api/StarSigns/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StarSignDTO>> GetStarSign(string id)
+        [HttpGet("{starSignName}")]
+        public async Task<ActionResult<StarSignDTO>> GetStarSign(string starSignName)
         {
-            var starSign = await _starSignRepository.GetByValue(id);
+            var starSign = await _starSignRepository.GetByValue(starSignName);
 
             if (starSign == null)
             {
@@ -48,10 +48,10 @@ namespace totally_legit_horoscopes_api.Controllers
         }
 
         // GET: api/StarSigns/5/matches
-        [HttpGet("{id}/matches")]
-        public async Task<ActionResult<StarSignMatch>> GetStarSignMatch(string id)
+        [HttpGet("{starSignName}/MatchesForToday")]
+        public async Task<ActionResult<StarSignMatch>> GetStarSignMatch(string starSignName)
         {
-            var starSign = await _starSignRepository.GetByValue(id);
+            var starSign = await _starSignRepository.GetByValue(starSignName);
 
             if (starSign == null)
             {
