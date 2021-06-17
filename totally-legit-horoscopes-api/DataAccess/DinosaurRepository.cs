@@ -15,8 +15,8 @@ namespace totally_legit_horoscopes_api.DataAccess
         {
             Dinosaur dinosaur = await context.Set<Dinosaur>().FindAsync(DinosaurName);
             context.Entry(dinosaur).State = EntityState.Unchanged;
+            context.Dinosaurs.Attach(dinosaur);
             return dinosaur;
         }
-
     }
 }
