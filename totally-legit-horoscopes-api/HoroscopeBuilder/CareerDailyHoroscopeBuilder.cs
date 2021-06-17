@@ -8,8 +8,8 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
     {
         public CareerDailyHoroscopeBuilder(
             User user,
-            HoroscopeTemplateRepository horoscopeTemplateRepository,
-            AbstractNounRepository abstractNounRepository)
+            IHoroscopeTemplateRepository horoscopeTemplateRepository,
+            IAbstractNounRepository abstractNounRepository)
             : base(
                 user,
                 horoscopeTemplateRepository,

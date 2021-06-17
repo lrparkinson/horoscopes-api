@@ -44,9 +44,10 @@ namespace totally_legit_horoscopes_api.DataAccess
             return true;
         }
 
-        public async void Save()
+        public async Task<bool> Save()
         {
             await context.SaveChangesAsync();
+            return true;
         }
     }
 }
