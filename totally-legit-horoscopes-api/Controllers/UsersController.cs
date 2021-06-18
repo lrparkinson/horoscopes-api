@@ -58,7 +58,7 @@ namespace totally_legit_horoscopes_api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> UpdateUser(string email, UserDTO user)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> UpdateUser(string email, [FromBody] User user)
         {
             // TODO:
             // change this to update things
@@ -144,5 +144,3 @@ namespace totally_legit_horoscopes_api.Controllers
         }
     }
 }
-
-
