@@ -14,7 +14,7 @@ namespace totally_legit_horoscopes_api.DataAccess
 
         public async Task<User> GetByEmail(string Email)
         {
-            return await context.Users.SingleAsync(x => x.Email.Equals(Email));
+            return await context.Users.Include(e => e.Hobbies).SingleAsync(x => x.Email.Equals(Email));
         }
 
         public override async Task<User> Get(long id)
@@ -28,11 +28,7 @@ namespace totally_legit_horoscopes_api.DataAccess
             context.Dinosaurs.Attach(user.FavoriteDinosaur);
             context.StarSigns.Attach(user.StarSign);
             context.Professions.Attach(user.Profession);
-            foreach (Hobby hobby in user.Hobbies)
-            {
-                context.Attach(hobby);
-            }
-            context.Set<User>().Update(user);
+            context.Entry(user).CurrentValues.SetValues(user);
             context.SaveChanges();
             return true;
         }

@@ -23,6 +23,7 @@ namespace totally_legit_horoscopes_api.Controllers
 
         private readonly ILifeNumberRepository _lifeNumberRepository;
         private readonly IDinosaurRepository _dinosaurRepository;
+        private readonly IHobbyRepository _hobbyRepository;
 
         public UsersController(
             IUserRepository userRepository,
@@ -30,6 +31,7 @@ namespace totally_legit_horoscopes_api.Controllers
             IHoroscopeRepository horoscopeRepository,
             ILifeNumberRepository lifeNumberRepository,
             IDinosaurRepository dinosaurRepository,
+            IHobbyRepository hobbyRepository,
             IMapper mapper)
         {
             _mapper = mapper;
@@ -38,6 +40,7 @@ namespace totally_legit_horoscopes_api.Controllers
             _horoscopeRepository = horoscopeRepository;
             _lifeNumberRepository = lifeNumberRepository;
             _dinosaurRepository = dinosaurRepository;
+            _hobbyRepository = hobbyRepository;
 
         }
 
@@ -60,14 +63,22 @@ namespace totally_legit_horoscopes_api.Controllers
         [HttpPut]
         public async Task<ActionResult<IEnumerable<UserDTO>>> UpdateUser(string email, [FromBody] User user)
         {
-            // TODO:
-            // change this to update things
             List<Hobby> mappedHobbies = user.Hobbies.Select(hobby => _mapper.Map<Hobby>(hobby)).ToList();
             Profession mappedProfession = _mapper.Map<Profession>(user.Profession);
             LifeNumber LifeNumber = await _lifeNumberRepository.Get(calculateLifeNumber(user.DateOfBirth));
             StarSign starSign = await getStarSignOfDate(user.DateOfBirth);
             Dinosaur dinosaur = await _dinosaurRepository.Get(user.FavoriteDinosaur.Name);
             User dbUser = await _userRepository.GetByEmail(user.Email);
+
+            if (dbUser.Hobbies != null)
+            {
+                foreach (Hobby hobby in dbUser.Hobbies)
+                {
+                    await _hobbyRepository.Delete(hobby.Name);
+                }
+                await _hobbyRepository.Save();
+            }
+
             dbUser.updateUser(user.Email, user.DateOfBirth, user.NthChild, mappedProfession, starSign, dinosaur, mappedHobbies, LifeNumber);
 
             await _userRepository.Update(dbUser);

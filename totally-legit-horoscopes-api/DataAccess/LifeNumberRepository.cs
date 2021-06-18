@@ -12,7 +12,7 @@ namespace totally_legit_horoscopes_api.DataAccess
         }
         public async override Task<LifeNumber> Get(long id)
         {
-            LifeNumber entity = await context.Set<LifeNumber>().FindAsync(System.Convert.ToInt32(id));
+            LifeNumber entity = await context.Set<LifeNumber>().FindAsync(id);
             return entity;
         }
 
