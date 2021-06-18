@@ -24,6 +24,12 @@ namespace totally_legit_horoscopes_api.DataAccess
                                                                                     starSign,
                                                                                     starSignRepository);
                 match = await generateStarSignMatchesService.CreateStarSignMatch();
+                context.Add(match);
+                context.Entry(match.MainStarSign).State = EntityState.Unchanged;
+                context.Entry(match.LoveMatch).State = EntityState.Unchanged;
+                context.Entry(match.CareerMatch).State = EntityState.Unchanged;
+                context.Entry(match.FriendshipMatch).State = EntityState.Unchanged;
+                await context.SaveChangesAsync();
             }
 
             return match;
@@ -31,7 +37,11 @@ namespace totally_legit_horoscopes_api.DataAccess
 
         private async Task<StarSignMatch> GetStarSignMatch(DateTime dateTime, StarSign starSign)
         {
-            return await context.StarSignMatches.Where(starSignMatch => starSignMatch.DateMatched.Date == dateTime.Date
+            return await context.StarSignMatches.Include(e => e.MainStarSign)
+                                                .Include(e => e.LoveMatch)
+                                                .Include(e => e.CareerMatch)
+                                                .Include(e => e.FriendshipMatch)
+                                                .Where(starSignMatch => starSignMatch.DateMatched.Date == dateTime.Date
                                                                         && starSignMatch.MainStarSign == starSign).FirstOrDefaultAsync();
         }
     }
