@@ -35,7 +35,7 @@ namespace totally_legit_horoscopes_api
                               builder =>
                               {
                                   builder.WithOrigins("http://localhost:3000",
-                                                "https://horoscopes-frontend.herokuapp.com/")
+                                                "https://horoscopes-frontend.herokuapp.com")
                                                 .AllowAnyHeader()
                                                 .AllowAnyMethod();
                               });
