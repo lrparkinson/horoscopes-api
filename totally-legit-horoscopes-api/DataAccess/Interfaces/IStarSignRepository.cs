@@ -9,6 +9,7 @@ namespace totally_legit_horoscopes_api.DataAccess
         Task<StarSign> GetByDate(DateTime date);
         public Task<StarSign> GetByValue(string name);
         public Task<StarSign> GetByStartMonth(int monthIndex);
+        public Task<StarSign> GetRandomStarSign(string excludeThisStarSign);
 
     }
 }

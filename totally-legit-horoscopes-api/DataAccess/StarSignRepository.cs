@@ -3,6 +3,7 @@ using totally_legit_horoscopes_api.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace totally_legit_horoscopes_api.DataAccess
 {
@@ -27,5 +28,11 @@ namespace totally_legit_horoscopes_api.DataAccess
         {
             return await context.StarSigns.SingleOrDefaultAsync(starSign => starSign.StartDate.Month == (monthIndex));
         }
+
+        public async Task<StarSign> GetRandomStarSign(string excludeThisStarSign)
+        {
+            return await context.StarSigns.OrderBy(x => Guid.NewGuid()).Where(x => !x.Name.Equals(excludeThisStarSign)).FirstOrDefaultAsync();
+        }
+
     }
 }

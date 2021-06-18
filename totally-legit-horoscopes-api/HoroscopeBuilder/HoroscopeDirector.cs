@@ -1,4 +1,5 @@
-﻿using totally_legit_horoscopes_api.Models;
+﻿using System.Threading.Tasks;
+using totally_legit_horoscopes_api.Models;
 
 namespace totally_legit_horoscopes_api.HoroscopeBuilder
 {
@@ -11,12 +12,13 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             this.horoscopeBuilder = horoscopeBuilder;
         }
 
-        public void ConstructFullHoroscope()
+        public async Task<Horoscope> ConstructFullHoroscope()
         {
-            this.horoscopeBuilder.CreateHoroscopeBase();
+            await this.horoscopeBuilder.CreateHoroscopeBase();
             this.horoscopeBuilder.PopulateUserInfo();
-            this.horoscopeBuilder.PopulateRandomWords();
-            this.horoscopeBuilder.SprinkleInMoreCustomDetails();
+            await this.horoscopeBuilder.PopulateRandomWords();
+            await this.horoscopeBuilder.SprinkleInMoreCustomDetails();
+            return this.GetHoroscope();
         }
 
         public Horoscope GetHoroscope()

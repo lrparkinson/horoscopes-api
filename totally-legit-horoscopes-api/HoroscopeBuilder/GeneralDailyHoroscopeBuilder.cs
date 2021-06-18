@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 
@@ -9,10 +10,12 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
         public GeneralDailyHoroscopeBuilder(
             User user,
             IHoroscopeTemplateRepository horoscopeTemplateRepository,
+            IStarSignRepository starSignRepository,
             IAbstractNounRepository abstractNounRepository)
             : base(
                 user,
                 horoscopeTemplateRepository,
+                starSignRepository,
                 abstractNounRepository)
         { }
 
@@ -21,7 +24,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             return horoscopeTemplateRepository.GetGeneralHoroscope();
         }
 
-        public async override void SprinkleInMoreCustomDetails()
+        public async override Task SprinkleInMoreCustomDetails()
         {
 
         }

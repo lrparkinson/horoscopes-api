@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using totally_legit_horoscopes_api.DataAccess;
 using totally_legit_horoscopes_api.Models;
 
@@ -7,7 +8,6 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
     public class LoveDailyHoroscopeBuilder : HoroscopeBuilder
     {
         private IStarSignMatchRepository starSignMatchRepository;
-        private IStarSignRepository starSignRepository;
         private const string abstractNounKey = "{abstract_noun}";
         private Random random;
 
@@ -21,6 +21,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             : base(
                 user,
                 horoscopeTemplateRepository,
+                starSignRepository,
                 abstractNounRepository)
         {
             int seed = HashCode.Combine(DateTime.UtcNow.Date, user.StarSign, user.NthChild, user.Profession, user.FavoriteDinosaur);
@@ -34,7 +35,7 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
             return horoscopeTemplateRepository.GetLoveHoroscope();
         }
 
-        public async override void PopulateRandomWords()
+        public async override Task PopulateRandomWords()
         {
             base.PopulateRandomWords();
 
@@ -51,9 +52,11 @@ namespace totally_legit_horoscopes_api.HoroscopeBuilder
 
                 this.horoscope.Reading = this.horoscope.Reading.Replace(abstractNounKey, abstractNoun);
             }
+
+
         }
 
-        public async override void SprinkleInMoreCustomDetails()
+        public async override Task SprinkleInMoreCustomDetails()
         {
             StarSignMatch match = await this.starSignMatchRepository.GetOrCreateStarSignMatch(this.user.StarSign, this.starSignRepository);
             this.horoscope.Reading += string.Format(" Hint: Look to {0} today!", match.LoveMatch.Name);
