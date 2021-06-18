@@ -34,7 +34,10 @@ namespace totally_legit_horoscopes_api
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               builder =>
                               {
-                                  builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                                  builder.WithOrigins("http://localhost:3000",
+                                                "https://horoscopes-frontend.herokuapp.com/")
+                                                .AllowAnyHeader()
+                                                .AllowAnyMethod();
                               });
         });
             services.AddDbContext<TotallyLegitHoroscopesContext>(options => options.UseNpgsql(GetConnectionString()), ServiceLifetime.Transient);
